@@ -1,22 +1,27 @@
 import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity,TextInput } from "react-native"
+import {View, Text, StyleSheet, TouchableOpacity,TextInput } from "react-native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../../../App";
 
+type LoginScreenProp = NativeStackNavigationProp<RootStackParamList, "Login">;
 const Login = () =>{
+
+  const navigation = useNavigation<LoginScreenProp>();
 
   return(
     <View style={styles.container}>
       <View style={styles.contenedorLogin}>
         <Text style={styles.titulo}>Inicio de sesión</Text>
-        <Text>Email</Text>
-        <TextInput style={styles.input}></TextInput>
-        <Text>Contraseña</Text>
-        <TextInput style={styles.input}></TextInput>
-        <Text>Si no tenes una cuenta, toca aquí</Text>
-        <TouchableOpacity style={styles.boton}>Iniciar sesión</TouchableOpacity>
-
+        <View style={styles.contenedorFormulario}>
+          <Text style={styles.textoInicioSesion}>Email</Text>
+          <TextInput style={styles.input}></TextInput>
+          <Text style={styles.textoInicioSesion}>Contraseña</Text>
+          <TextInput style={styles.input} secureTextEntry={true}></TextInput>
+          <Text style={styles.textoChico}>¿No tenes una cuenta? <Text style={styles.link} onPress={() => navigation.navigate("Inicio")}>Registrate</Text></Text>
+          <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate("Inicio")}><Text>Iniciar sesión</Text></TouchableOpacity>
+        </View>
       </View>
-
-
     </View>
 
 
@@ -29,6 +34,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#4db6ac",
     padding: 20,
+    alignItems: "center",
   },
   titulo: {
     textAlign: "center",
@@ -36,6 +42,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "bold",
     color: "#333",
+    marginTop: 100,
   },
   contenedor: {
     flexDirection: "row",
@@ -72,9 +79,9 @@ const styles = StyleSheet.create({
   },
   contenedorLogin: {
     flex: 1,
-    backgroundColor: "#867777",
+    backgroundColor: "#f5f5f5",
     width: 330,
-    height: 130,
+    height: 100,
     borderRadius: 10,
     alignItems: "center",
   },
@@ -83,8 +90,8 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 12,
     padding: 10,
-    marginBottom: 15,
     backgroundColor: "#fafafa",
+    width: 250,
   },
   boton: {
     backgroundColor: "#4db6ac",
@@ -92,6 +99,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
   },
+  contenedorFormulario:{
+    marginTop: 50,
+  },
+  textoInicioSesion:{
+    marginTop: 10,
+  },
+  textoChico:{
+    fontSize: 11,
+    marginBottom: 30,
+  },
+  link:{
+    color: "#0004d8"
+
+  }
 });
 
 export default Login;
