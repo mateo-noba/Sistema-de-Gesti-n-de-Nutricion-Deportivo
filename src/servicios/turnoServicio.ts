@@ -1,4 +1,8 @@
-const URL = "https://692a54db7615a15ff24c6d68.mockapi.io/turnos";
+// Si estás probando en la Web o emulador:
+const URL = "http://localhost:3000/api/turnos";
+
+// NOTA: Si usás la app en un CELULAR FÍSICO con Expo Go,
+// reemplazá 'localhost' por la IP local de tu PC (ej: "http://192.168.1.50:3000/api/turnos"
 
 export const obtenerTurnos = async () => {
   const respuesta = await fetch(URL);
