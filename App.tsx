@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Inicio from "./src/paginas/Inicio";
 import Login from "./src/paginas/Login/Login";
+import Home from "./src/paginas/Cliente/Home";
 import ListaTurnos from "./src/paginas/Turnos/ListaTurnos";
 import AgregarTurno from "./src/paginas/Turnos/AgregarTurno";
 import EditarTurno from "./src/paginas/Turnos/EditarTurno";
@@ -12,6 +13,7 @@ import EditarTurno from "./src/paginas/Turnos/EditarTurno";
 export type RootStackParamList = {
   Inicio: undefined;
   Login: undefined;
+  Home: undefined;
   ListaTurnos: undefined;
   AgregarTurno: undefined;
   EditarTurno: { id: string };
@@ -32,6 +34,7 @@ export default function App() {
       >
         <Stack.Screen name="Inicio" component={Inicio} options={{ title: "Gestión de Turnos – Nutrición" }} />
         <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
+        <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
         <Stack.Screen name="ListaTurnos" component={ListaTurnos} options={{ title: "Lista de Turnos" }} />
         <Stack.Screen name="AgregarTurno" component={AgregarTurno} options={{ title: "Crear Turno" }} />
         <Stack.Screen name="EditarTurno" component={EditarTurno} options={{ title: "Editar Turno" }} />
