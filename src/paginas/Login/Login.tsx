@@ -19,7 +19,7 @@ const Login = () =>{
           <Text style={styles.textoInicioSesion}>Contraseña</Text>
           <TextInput style={styles.input} secureTextEntry={true}></TextInput>
           <Text style={styles.textoChico}>¿No tenes una cuenta? <Text style={styles.link} onPress={() => navigation.navigate("Inicio")}>Registrate</Text></Text>
-          <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate("Inicio")}><Text>Iniciar sesión</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate("Home")}><Text>Iniciar sesión</Text></TouchableOpacity>
         </View>
       </View>
     </View>
