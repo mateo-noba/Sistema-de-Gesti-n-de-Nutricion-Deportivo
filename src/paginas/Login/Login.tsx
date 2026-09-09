@@ -1,41 +1,62 @@
+//Importar react para tenerlo en caso de que sea necesario
 import React from "react";
+//Importar las etiquetas que se van a usar en la pantalla, actuan similar a las etiquetas de HTML
 import {View, Text, StyleSheet, TouchableOpacity,TextInput } from "react-native";
+//Importar el prop que le dice a typescript que funciones tiene el useNavigate y las pantallas que existen
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+//El hook que permite que navegar por las pantallas sin la necesidad de tene que pasarselo como prop
 import { useNavigation } from "@react-navigation/native";
+//El prop o lista de pantallas que va a tener el sistema y las cosas que se esperan cuando se cambia de pantalla
 import { RootStackParamList } from "../../../App";
 
+//Variable de tipo en donde se guarda el prop de la lista de pantallas que tiene el sistema, junto de la pantalla en la que esta ubicado actualmente
 type LoginScreenProp = NativeStackNavigationProp<RootStackParamList, "Login">;
+
+//Funcion del componenete o pantalla login
 const Login = () =>{
 
+  //Variable que nos permitirá navegar por las diferentes pantallas del sistema
   const navigation = useNavigation<LoginScreenProp>();
 
   return(
+    //Contenedor principal de la pantalla, es la que tiene el fondo verde
     <View style={styles.container}>
+      {/*Contenedor del login, en el esta todo los titulos, texto y textbox del login, tiene el fondo blanco */}
       <View style={styles.contenedorLogin}>
+        {/* El titulo principal de la pantalla de inciar sesión */}
         <Text style={styles.titulo}>Inicio de sesión</Text>
+        {/* El contenedor que tiene toda la parte del formulario, o sea text, textbox y botones */}
         <View style={styles.contenedorFormulario}>
+          {/* Text para indicarle al usuario que tiene que ingresar su email */}
           <Text style={styles.textoInicioSesion}>Email</Text>
+          {/* Textbox en el que el usuario pondrá su mail */}
           <TextInput style={styles.input}></TextInput>
+          {/* Text para indicarle al usuario que tiene que ingresar su contraseña */}
           <Text style={styles.textoInicioSesion}>Contraseña</Text>
+          {/* Textbox en el que el usuario pondrá su contraseña */}
           <TextInput style={styles.input} secureTextEntry={true}></TextInput>
-          <Text style={styles.textoChico}>¿No tenes una cuenta? <Text style={styles.link} onPress={() => navigation.navigate("Inicio")}>Registrate</Text></Text>
+          {/* Text en caso de que el usuario haya olvidado su contraseña */}
+          <Text style={styles.textoChico}>¿Olvidaste tu contraseña? <Text style={styles.link} onPress={() => navigation.navigate("Inicio")}>Recuperar</Text></Text>
+          {/* Boton con el que el usuario podra tocar para inciar sesion en el sistema */}
           <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate("Inicio")}><Text>Iniciar sesión</Text></TouchableOpacity>
+          {/* Text que el usuario podrá usar para que lo lleve a crear una cuenta*/}
+          <Text style={styles.textoChico}>¿No tenes una cuenta? <Text style={styles.link} onPress={() => navigation.navigate("Registro")}>Registrate</Text></Text>
         </View>
       </View>
     </View>
-
-
   );
 }
 
 
 const styles = StyleSheet.create({
+  //Estilo para el contenedor principal
   container: {
     flex: 1,
     backgroundColor: "#4db6ac",
     padding: 20,
     alignItems: "center",
   },
+  //Estilo para el título principal
   titulo: {
     textAlign: "center",
     marginBottom: 25,
