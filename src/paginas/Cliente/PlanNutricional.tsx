@@ -11,9 +11,13 @@ const PlanNutricional = () =>{
 
   return(
     <View style={styles.container}>
-        <TouchableOpacity style={styles.botonAtras}><Image source={require("../../../assets/flechaAtras.png")}/></TouchableOpacity>
-        <TouchableOpacity style={styles.botonDescarga}>Descargar en formato PDF</TouchableOpacity>
-        <TouchableOpacity style={styles.botonChatbot}><Image source={require("../../../assets/ensaladin.png")} style={styles.imagenChatbot}/></TouchableOpacity>
+        <View style={styles.contenedorBotones}>
+          <View style={styles.botonesIzquierda}>
+            <TouchableOpacity style={styles.botonAtras} onPress={() => navigation.goBack()}><Image source={require("../../../assets/flechaAtras.png")} style={styles.imagenFlecha}/></TouchableOpacity>
+            <TouchableOpacity style={styles.botonDescarga}>Descargar en formato PDF</TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.botonChatbot}><Image source={require("../../../assets/ensaladin.png")} style={styles.imagenChatbot}/></TouchableOpacity>
+        </View>
     
         <View style={styles.contenedorPlanNutricional}>
             <Image source={require("../../../assets/planNutricional.jpg")}/>
@@ -59,6 +63,18 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 25,
   },
+  contenedorBotones:{
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    paddingHorizontal: 20,
+  },
+  botonesIzquierda:{
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10
+  },
   card: {
     width: 230,
     padding: 20,
@@ -91,8 +107,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     width: 900,
     height: 600,
-    marginTop: 70,
-    marginBottom: 50,
+    marginBottom: 40,
     borderRadius: 10,
     alignItems: "center",
   },
@@ -139,8 +154,7 @@ const styles = StyleSheet.create({
     color:"#f5f5f5",
     fontWeight: "bold",
     fontSize: 19,
-    alignSelf: "flex-start",
-    position: "absolute",
+    
     height: 50,
     width: 270,
   },
@@ -152,22 +166,21 @@ const styles = StyleSheet.create({
     color:"#f5f5f5",
     fontWeight: "bold",
     fontSize: 20,
-    alignSelf: "flex-end",
-    position: "absolute",
+    
     height: 80,
     width: 80,
   },
   botonAtras:{
     padding: 14,
     borderRadius: 10,
+    justifyContent: "center",
     alignItems: "center",
     color:"#f5f5f5",
     fontWeight: "bold",
     fontSize: 19,
-    alignSelf: "flex-start",
-    position: "absolute",
-    height: 50,
-    width: 270,
+
+    height: 40,
+    width: 40,
   },
   contenedorFormulario:{
     marginTop: 50,
@@ -188,6 +201,10 @@ const styles = StyleSheet.create({
   imagenChatbot:{
     width: 60,
     height: 60,
+  },
+  imagenFlecha:{
+    width: 30,
+    height: 30,
   },
   link:{
     color: "#0004d8"
