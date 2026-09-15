@@ -38,10 +38,9 @@ const Login = () =>{
           {/* Text en caso de que el usuario haya olvidado su contraseña */}
           <Text style={styles.textoChico}>¿Olvidaste tu contraseña? <Text style={styles.link} onPress={() => navigation.navigate("Inicio")}>Recuperar</Text></Text>
           {/* Boton con el que el usuario podra tocar para inciar sesion en el sistema */}
-          <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate("Inicio")}><Text>Iniciar sesión</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate("Home")}><Text>Iniciar sesión</Text></TouchableOpacity>
           {/* Text que el usuario podrá usar para que lo lleve a crear una cuenta*/}
           <Text style={styles.textoChico}>¿No tenes una cuenta? <Text style={styles.link} onPress={() => navigation.navigate("Registro")}>Registrate</Text></Text>
-          <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate("Home")}><Text>Iniciar sesión</Text></TouchableOpacity>
         </View>
       </View>
     </View>

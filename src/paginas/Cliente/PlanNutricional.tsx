@@ -3,30 +3,20 @@ import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image } from "react-
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
-import PlanNutricional from "./PlanNutricional";
 
-type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, "Home">;
-const Home = () =>{
+type PlanNutricionalScreenProp = NativeStackNavigationProp<RootStackParamList, "PlanNutricional">;
+const PlanNutricional = () =>{
 
-  const navigation = useNavigation<HomeScreenProp>();
+  const navigation = useNavigation<PlanNutricionalScreenProp>();
 
   return(
     <View style={styles.container}>
-        
-        <TouchableOpacity style={styles.botonNotas}></TouchableOpacity>
+        <TouchableOpacity style={styles.botonAtras}><Image source={require("../../../assets/flechaAtras.png")}/></TouchableOpacity>
+        <TouchableOpacity style={styles.botonDescarga}>Descargar en formato PDF</TouchableOpacity>
         <TouchableOpacity style={styles.botonChatbot}><Image source={require("../../../assets/ensaladin.png")} style={styles.imagenChatbot}/></TouchableOpacity>
     
-        <View style={styles.contenedorHome}>
-            <Image source={require("../../../assets/IconoCuenta.svg")} style={styles.iconoCuenta} />
-            <Text style={styles.titulo}>Nombre apellido</Text>
-            <Text style={styles.titulo}>Día del turno:</Text>
-            <Text style={styles.titulo}>Hora del turno:</Text>
-            <View style={styles.contenedorHorizontal}>
-                <TouchableOpacity style={styles.botonPlan} onPress={() => navigation.navigate("PlanNutricional")}>Plan nutricional</TouchableOpacity>
-                <TouchableOpacity style={styles.botonRutina}>Rutina de ejercicios</TouchableOpacity>
-                <TouchableOpacity style={styles.botonCancelar}>Cancelar turno</TouchableOpacity>
-            </View>
-    
+        <View style={styles.contenedorPlanNutricional}>
+            <Image source={require("../../../assets/planNutricional.jpg")}/>
         </View>
     </View>
 
@@ -96,11 +86,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: "#333",
   },
-  contenedorHome: {
+  contenedorPlanNutricional: {
     flex: 1,
     backgroundColor: "#f5f5f5",
-    width: 1000,
-    height: 100,
+    width: 900,
+    height: 600,
+    marginTop: 70,
+    marginBottom: 50,
     borderRadius: 10,
     alignItems: "center",
   },
@@ -139,18 +131,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
   },
-  botonNotas: {
-    backgroundColor: "#f6cf66",
-    padding: 12,
+  botonDescarga: {
+    backgroundColor: "#2a9ee2",
+    padding: 14,
     borderRadius: 10,
     alignItems: "center",
     color:"#f5f5f5",
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 19,
     alignSelf: "flex-start",
     position: "absolute",
-    height: 110,
-    width: 110,
+    height: 50,
+    width: 270,
   },
    botonChatbot: {
     backgroundColor: "#444a4a",
@@ -164,6 +156,18 @@ const styles = StyleSheet.create({
     position: "absolute",
     height: 80,
     width: 80,
+  },
+  botonAtras:{
+    padding: 14,
+    borderRadius: 10,
+    alignItems: "center",
+    color:"#f5f5f5",
+    fontWeight: "bold",
+    fontSize: 19,
+    alignSelf: "flex-start",
+    position: "absolute",
+    height: 50,
+    width: 270,
   },
   contenedorFormulario:{
     marginTop: 50,
@@ -191,4 +195,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Home;
+export default PlanNutricional;
