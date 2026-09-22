@@ -25,6 +25,9 @@ export type RootStackParamList = {
   ListaTurnos: undefined;
   AgregarTurno: undefined;
   EditarTurno: { id: string };
+  ListaPacientes: undefined;
+  AgregarPaciente: undefined;
+  EditarPaciente: { id: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
