@@ -8,4 +8,5 @@ export interface Paciente {
     peso:number;
     altura:number;
     imc:number;
+    estado:string;
 }

@@ -29,6 +29,7 @@ const ListaPacientes = () => {
   const [filtroPeso, setFiltroPeso] = useState("");
   const [filtroAltura, setFiltroAltura] = useState("");
   const [filtroImc, setFiltroImc] = useState("");
+  const [filtroEstado, setFiltroEstado] = useState("");
   const navigation = useNavigation<ListaPacientesProp>();
 
   useEffect(() => {
@@ -90,7 +91,7 @@ const ListaPacientes = () => {
     const coincidePeso = filtroPeso === "" || p.peso === Number(filtroPeso);
     const coincideAltura = filtroAltura === "" || p.altura === Number(filtroAltura);
     const coincideImc = filtroImc === "" || p.imc === Number(filtroImc);
-
+    const coincideEstado = filtroEstado === "" || p.estado.toLowerCase().includes(filtroEstado);
     const coincideBusquedaGlobal =
       texto === "" ||
       p.nombre.toLowerCase().includes(texto) ||
@@ -100,9 +101,10 @@ const ListaPacientes = () => {
       p.telefono.toLowerCase().includes(texto) ||
       p.peso.toString().includes(texto) ||
       p.altura.toString().includes(texto) ||
-      p.imc.toString().includes(texto);
-      
-    return coincideNombre && coincideApellido && coincideDni && coincideEmail && coincideTelefono && coincidePeso && coincideAltura && coincideImc && coincideBusquedaGlobal;
+      p.imc.toString().includes(texto) ||
+      p.estado.toLowerCase().includes(texto);
+
+    return coincideNombre && coincideApellido && coincideDni && coincideEmail && coincideTelefono && coincidePeso && coincideAltura && coincideImc && coincideEstado && coincideBusquedaGlobal;
   });
 
   if (cargando) {
@@ -182,6 +184,12 @@ const ListaPacientes = () => {
           value={filtroImc}
           onChangeText={setFiltroImc}
         />
+        <TextInput
+          style={styles.filtroInput}
+          placeholder="Filtrar por Estado"
+          value={filtroEstado}
+          onChangeText={setFiltroEstado}
+        />
         <TouchableOpacity style={styles.btnLimpiar} onPress={limpiarFiltros}>
           <Text>Limpiar filtros</Text>
         </TouchableOpacity>
@@ -200,13 +208,13 @@ const ListaPacientes = () => {
               <View style={styles.botonera}>
                 <TouchableOpacity
                   style={styles.botonAgregar}
-                  onPress={() => navigation.navigate("agregarPaciente")} //pendiente crear agregarPaciente.tsx dentro de la carpeta pacientes
+                  onPress={() => navigation.navigate("AgregarPaciente")} //pendiente crear agregarPaciente.tsx dentro de la carpeta pacientes
                 >
                   <Text style={{ color: "white" }}>Agregar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.botonEditar}
-                  onPress={() => navigation.navigate("editarPaciente", { id: item.id! })} //pendiente crear editarPaciente.tsx dentro de la carpeta pacientes
+                  onPress={() => navigation.navigate("EditarPaciente", { id: item.id! })} //pendiente crear editarPaciente.tsx dentro de la carpeta pacientes
                 >
                   <Text style={{ color: "white" }}>Editar</Text>
                 </TouchableOpacity>
