@@ -10,6 +10,7 @@ import Registro2 from "./src/paginas/Login/Registro2";
 import Home from "./src/paginas/Cliente/Home";
 import PlanNutricional from "./src/paginas/Cliente/PlanNutricional";
 import RutinaDeEjercicios from "./src/paginas/Cliente/RutinaDeEjercicios";
+import Notas from "./src/paginas/Cliente/Notas";
 import ListaTurnos from "./src/paginas/Turnos/ListaTurnos";
 import AgregarTurno from "./src/paginas/Turnos/AgregarTurno";
 import EditarTurno from "./src/paginas/Turnos/EditarTurno";
@@ -22,6 +23,7 @@ export type RootStackParamList = {
   Home: undefined;
   PlanNutricional: undefined;
   RutinaDeEjercicios: undefined;
+  Notas: undefined;
   ListaTurnos: undefined;
   AgregarTurno: undefined;
   EditarTurno: { id: string };
@@ -50,6 +52,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
         <Stack.Screen name="PlanNutricional" component={PlanNutricional} options={{headerShown: false}}/>
         <Stack.Screen name="RutinaDeEjercicios" component={RutinaDeEjercicios} options={{headerShown: false}}/>
+        <Stack.Screen name="Notas" component={Notas} options={{headerShown: false}}/>
         <Stack.Screen name="ListaTurnos" component={ListaTurnos} options={{ title: "Lista de Turnos" }} />
         <Stack.Screen name="AgregarTurno" component={AgregarTurno} options={{ title: "Crear Turno" }} />
         <Stack.Screen name="EditarTurno" component={EditarTurno} options={{ title: "Editar Turno" }} />
