@@ -31,6 +31,16 @@ const Inicio = () => {
           <Text style={styles.tituloCard}>Crear turno</Text>
           <Text style={styles.descripcion}>Registrar un nuevo turno.</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate("AgregarTurno")}
+        >
+          <Text style={styles.icono}>👥</Text>
+          <Text style={styles.tituloCard}>Lista de pacientes</Text>
+          <Text style={styles.descripcion}>Ver lista de todos los pacientes.</Text>
+        </TouchableOpacity>
+
       </View>
     </View>
   );

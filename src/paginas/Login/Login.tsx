@@ -4,7 +4,7 @@ import React from "react";
 import {View, Text, StyleSheet, TouchableOpacity,TextInput } from "react-native";
 //Importar el prop que le dice a typescript que funciones tiene el useNavigate y las pantallas que existen
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-//El hook que permite que navegar por las pantallas sin la necesidad de tene que pasarselo como prop
+//El hook que permite que navegar por las pantallas sin la necesidad de tener que pasarselo como prop
 import { useNavigation } from "@react-navigation/native";
 //El prop o lista de pantallas que va a tener el sistema y las cosas que se esperan cuando se cambia de pantalla
 import { RootStackParamList } from "../../../App";
