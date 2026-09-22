@@ -20,7 +20,7 @@ const PlanNutricional = () =>{
         </View>
     
         <View style={styles.contenedorPlanNutricional}>
-            <Image source={require("../../../assets/planNutricional.jpg")}/>
+            <Image style={styles.imagenPlanNutricional} source={require("../../../assets/planNutricional.jpg")}/>
         </View>
     </View>
 
@@ -105,10 +105,11 @@ const styles = StyleSheet.create({
   contenedorPlanNutricional: {
     flex: 1,
     backgroundColor: "#f5f5f5",
-    width: 900,
+    width: 740,
     height: 600,
-    marginBottom: 40,
+    marginBottom: 100,
     borderRadius: 10,
+    justifyContent: "center",
     alignItems: "center",
   },
   input: {
@@ -205,6 +206,10 @@ const styles = StyleSheet.create({
   imagenFlecha:{
     width: 30,
     height: 30,
+  },
+  imagenPlanNutricional:{
+    marginTop: 10,
+    marginBottom: 10,
   },
   link:{
     color: "#0004d8"
