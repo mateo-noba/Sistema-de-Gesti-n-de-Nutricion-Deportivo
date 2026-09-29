@@ -1,13 +1,31 @@
 import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image } from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image, ScrollView } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
+import { useState, useEffect } from "react"
 import { RootStackParamList } from "../../../App";
 
 type NotasScreenProp = NativeStackNavigationProp<RootStackParamList, "Notas">;
 const Notas = () =>{
 
   const navigation = useNavigation<NotasScreenProp>();
+  const [notas, setNotas] = useState([
+    {
+      id:1,
+      titulo:"Control inicial",
+      contenido: "Contenido 1",
+      fecha:"16/06/2026",
+      pacienteId:"p1",
+    },
+    {
+      id:2,
+      titulo:"Control inicial",
+      contenido: "Contenido 2",
+      fecha:"16/06/2026",
+      pacienteId:"p2",
+    },
+    
+  ])
 
   return(
     <View style={styles.container}>
@@ -19,36 +37,16 @@ const Notas = () =>{
         </View>
     
         <View style={styles.contenedorNotas}>
-            <View style={styles.notas}>
-                <Text>1</Text>
-            </View>
-            <View style={styles.notas}>
-                <Text>2</Text>
-            </View>
-            <View style={styles.notas}>
-                <Text>3</Text>
-            </View>
-            <View style={styles.notas}>
-                <Text>4</Text>
-            </View>
-            <View style={styles.notas}>
-                <Text>5</Text>
-            </View>
-            <View style={styles.notas}>
-                <Text>6</Text>
-            </View>
-            <View style={styles.notas}>
-                <Text>6</Text>
-            </View>
-            <View style={styles.notas}>
-                <Text>6</Text>
-            </View>
-            <View style={styles.notas}>
-                <Text>6</Text>
-            </View>
-            <View style={styles.notas}>
-                <Text>6</Text>
-            </View>
+            {notas.map((nota) => (
+                <TouchableOpacity
+                  key={nota.id}
+                  style={styles.notas}
+                  onPress={() => navigation.navigate("DetalleNotas")}
+                >
+                  <Text>{nota.titulo}</Text>
+                  <Text>{nota.fecha}</Text>
+                </TouchableOpacity>
+            ))}
         </View>
     </View>
 
@@ -139,14 +137,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
+    columnGap: 30,
     padding: 20,
   },
   notas:{
     backgroundColor: "#fff79d",
-    width: "18%",
+    width: 200,
     height: 200,
     marginBottom: 20,
+    justifyContent: "center",
+    alignItems: "center"
   },
   input: {
     borderWidth: 1,
