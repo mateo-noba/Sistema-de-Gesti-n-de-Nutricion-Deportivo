@@ -35,7 +35,7 @@ const DetalleNotas = () =>{
           <TouchableOpacity style={styles.botonChatbot}><Image source={require("../../../assets/ensaladin.png")} style={styles.imagenChatbot}/></TouchableOpacity>
         </View>
     
-        <ScrollView style={styles.contenedorNotas}>
+        <ScrollView showsVerticalScrollIndicator={false} style={styles.contenedorNotas}>
            <Text style={styles.titulo}>{notas[0].titulo}</Text>
            <Text style={styles.titulo}>{notas[0].fecha}</Text>
            <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur eaque et dicta laborum enim delectus esse distinctio excepturi repellat natus saepe veniam deleniti tempora animi nisi soluta, deserunt amet. Deserunt. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi praesentium omnis ratione fugit minima. Aspernatur libero sunt voluptate, autem numquam reprehenderit consectetur quaerat obcaecati quo deserunt saepe excepturi, maiores perferendis? Lorem ipsum dolor sit amet consectetur adipisicing elit. Id vero minus autem magnam voluptates expedita? Quasi mollitia cupiditate, temporibus commodi nam officia eaque assumenda saepe optio omnis necessitatibus nemo? Perferendis! Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium repellendus, provident velit tenetur reiciendis quam reprehenderit voluptas nemo saepe at modi laudantium, nobis unde, a incidunt perspiciatis sint commodi corporis? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe blanditiis tenetur eos est iste officiis consequuntur quod ad magni? Officia amet laudantium, deserunt laboriosam culpa error nihil? Voluptatum, sunt accusantium.</Text>

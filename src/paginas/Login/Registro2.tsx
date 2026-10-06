@@ -1,34 +1,118 @@
-import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity,TextInput } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, ActivityIndicator } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_URL } from "../../../backend/src/config/api";
 
-type RegistroScreenProp = NativeStackNavigationProp<RootStackParamList, "Registro">;
-const Registro2 = () =>{
+type Registro2ScreenProp = NativeStackNavigationProp<RootStackParamList, "Registro2">;
+type Registro2RouteProp = RouteProp<RootStackParamList, "Registro2">;
 
-  const navigation = useNavigation<RegistroScreenProp>();
+const Registro2 = () => {
+  const navigation = useNavigation<Registro2ScreenProp>();
+  const route = useRoute<Registro2RouteProp>();
 
-  return(
+  // Datos provenientes del paso 1
+  const { nombre, apellido, dni, telefono } = route.params || {};
+
+  // Estados del paso 2
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleCrearCuenta = async () => {
+    if (!email || !password || !confirmPassword) {
+      Alert.alert("Error", "Por favor completá todos los campos");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Las contraseñas no coinciden");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Reemplazá con la IP local de tu servidor Node
+      const response = await fetch(`${API_URL}/registro`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre,
+          apellido,
+          dni,
+          telefono,
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.id_usuario) {
+        // Guardamos la sesión iniciada
+        await AsyncStorage.setItem("userId", String(data.id_usuario));
+        Alert.alert("¡Éxito!", "Cuenta creada correctamente", [
+          { text: "OK", onPress: () => navigation.navigate("Home") },
+        ]);
+      } else {
+        Alert.alert("Error en el registro", data.mensaje || "No se pudo crear la cuenta");
+      }
+    } catch (error) {
+      console.error("Error al registrar:", error);
+      Alert.alert("Error", "Ocurrió un error de conexión con el servidor");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
     <View style={styles.container}>
       <View style={styles.contenedorLogin}>
         <Text style={styles.titulo}>Crear una cuenta</Text>
+        <Text style={styles.subtitulo}>Paso 2 de 2: Credenciales</Text>
+
         <View style={styles.contenedorFormulario}>
           <Text style={styles.textoRegistro}>Email</Text>
-          <TextInput style={styles.input}></TextInput>
+          <TextInput 
+            style={styles.input} 
+            value={email} 
+            onChangeText={setEmail} 
+            keyboardType="email-address" 
+            autoCapitalize="none" 
+          />
+
           <Text style={styles.textoRegistro}>Contraseña</Text>
-          <TextInput style={styles.input} secureTextEntry={true}></TextInput>
+          <TextInput 
+            style={styles.input} 
+            secureTextEntry={true} 
+            value={password} 
+            onChangeText={setPassword} 
+          />
+
           <Text style={styles.textoRegistro}>Repetir contraseña</Text>
-          <TextInput style={styles.input} secureTextEntry={true}></TextInput>
-          <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate("Inicio")}><Text>Crear cuenta</Text></TouchableOpacity>
+          <TextInput 
+            style={styles.input} 
+            secureTextEntry={true} 
+            value={confirmPassword} 
+            onChangeText={setConfirmPassword} 
+          />
+
+          <TouchableOpacity style={styles.boton} onPress={handleCrearCuenta} disabled={loading}>
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.textoBoton}>Crear cuenta</Text>
+            )}
+          </TouchableOpacity>
         </View>
       </View>
     </View>
-
-
   );
-}
-
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -39,50 +123,21 @@ const styles = StyleSheet.create({
   },
   titulo: {
     textAlign: "center",
-    marginBottom: 25,
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#333",
-    marginTop: 100,
+    marginTop: 40,
   },
-  contenedor: {
-    flexDirection: "row",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    gap: 25,
-  },
-  card: {
-    width: 230,
-    padding: 20,
-    backgroundColor: "#f5f5f5",
-    borderRadius: 12,
-    alignItems: "center",
-    margin: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  icono: {
-    fontSize: 45,
-    marginBottom: 10,
-  },
-  tituloCard: {
-    fontSize: 20,
-    fontWeight: "bold",
+  subtitulo: {
     textAlign: "center",
-  },
-  descripcion: {
-    textAlign: "center",
-    marginTop: 5,
-    color: "#333",
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 20,
   },
   contenedorLogin: {
     flex: 1,
     backgroundColor: "#f5f5f5",
     width: 330,
-    height: 100,
     borderRadius: 10,
     alignItems: "center",
   },
@@ -99,22 +154,18 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 25,
   },
-  contenedorFormulario:{
+  textoBoton: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  contenedorFormulario: {
     marginTop: 0,
   },
-  textoRegistro:{
+  textoRegistro: {
     marginTop: 10,
   },
-  textoChico:{
-    fontSize: 11,
-    marginBottom: 30,
-  },
-  link:{
-    color: "#0004d8"
-
-  }
 });
 
 export default Registro2;

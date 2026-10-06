@@ -1,36 +1,80 @@
-import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity,TextInput } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
 
 type RegistroScreenProp = NativeStackNavigationProp<RootStackParamList, "Registro">;
-const Registro = () =>{
 
+const Registro = () => {
   const navigation = useNavigation<RegistroScreenProp>();
 
-  return(
+  // Estados del formulario 1
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [dni, setDni] = useState("");
+  const [telefono, setTelefono] = useState("");
+
+  const handleSiguiente = () => {
+    if (!nombre || !apellido || !dni || !telefono) {
+      Alert.alert("Campos incompletos", "Por favor completá todos los datos.");
+      return;
+    }
+
+    // Navegamos al paso 2 enviando los datos recolectados
+    navigation.navigate("Registro2", {
+      nombre,
+      apellido,
+      dni,
+      telefono,
+    });
+  };
+
+  return (
     <View style={styles.container}>
       <View style={styles.contenedorLogin}>
         <Text style={styles.titulo}>Crear una cuenta</Text>
+        <Text style={styles.subtitulo}>Paso 1 de 2: Datos Personales</Text>
+
         <View style={styles.contenedorFormulario}>
           <Text style={styles.textoRegistro}>Nombre</Text>
-          <TextInput style={styles.input}></TextInput>
+          <TextInput 
+            style={styles.input} 
+            value={nombre} 
+            onChangeText={setNombre} 
+          />
+
           <Text style={styles.textoRegistro}>Apellido</Text>
-          <TextInput style={styles.input}></TextInput>
+          <TextInput 
+            style={styles.input} 
+            value={apellido} 
+            onChangeText={setApellido} 
+          />
+
           <Text style={styles.textoRegistro}>DNI</Text>
-          <TextInput style={styles.input}></TextInput>
-          <Text style={styles.textoRegistro}>Telefono</Text>
-          <TextInput style={styles.input}></TextInput>
-          <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate("Registro2")}><Text>Siguiente</Text></TouchableOpacity>
+          <TextInput 
+            style={styles.input} 
+            value={dni} 
+            onChangeText={setDni} 
+            keyboardType="numeric" 
+          />
+
+          <Text style={styles.textoRegistro}>Teléfono</Text>
+          <TextInput 
+            style={styles.input} 
+            value={telefono} 
+            onChangeText={setTelefono} 
+            keyboardType="phone-pad" 
+          />
+
+          <TouchableOpacity style={styles.boton} onPress={handleSiguiente}>
+            <Text style={styles.textoBoton}>Siguiente</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
-
-
   );
-}
-
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -41,50 +85,21 @@ const styles = StyleSheet.create({
   },
   titulo: {
     textAlign: "center",
-    marginBottom: 25,
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#333",
-    marginTop: 100,
+    marginTop: 40,
   },
-  contenedor: {
-    flexDirection: "row",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    gap: 25,
-  },
-  card: {
-    width: 230,
-    padding: 20,
-    backgroundColor: "#f5f5f5",
-    borderRadius: 12,
-    alignItems: "center",
-    margin: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  icono: {
-    fontSize: 45,
-    marginBottom: 10,
-  },
-  tituloCard: {
-    fontSize: 20,
-    fontWeight: "bold",
+  subtitulo: {
     textAlign: "center",
-  },
-  descripcion: {
-    textAlign: "center",
-    marginTop: 5,
-    color: "#333",
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 20,
   },
   contenedorLogin: {
     flex: 1,
     backgroundColor: "#f5f5f5",
     width: 330,
-    height: 100,
     borderRadius: 10,
     alignItems: "center",
   },
@@ -101,22 +116,18 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 25,
   },
-  contenedorFormulario:{
+  textoBoton: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  contenedorFormulario: {
     marginTop: 0,
   },
-  textoRegistro:{
+  textoRegistro: {
     marginTop: 10,
   },
-  textoChico:{
-    fontSize: 11,
-    marginBottom: 30,
-  },
-  link:{
-    color: "#0004d8"
-
-  }
 });
 
 export default Registro;

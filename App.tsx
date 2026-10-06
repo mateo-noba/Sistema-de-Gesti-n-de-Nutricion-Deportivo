@@ -12,6 +12,7 @@ import PlanNutricional from "./src/paginas/Cliente/PlanNutricional";
 import RutinaDeEjercicios from "./src/paginas/Cliente/RutinaDeEjercicios";
 import Notas from "./src/paginas/Cliente/Notas";
 import DetalleNotas from "./src/paginas/Cliente/DetalleNota";
+import ChatBot from "./src/paginas/ChatBot/ChatBot";
 import ListaTurnos from "./src/paginas/Turnos/ListaTurnos";
 import AgregarTurno from "./src/paginas/Turnos/AgregarTurno";
 import EditarTurno from "./src/paginas/Turnos/EditarTurno";
@@ -20,12 +21,13 @@ export type RootStackParamList = {
   Inicio: undefined;
   Login: undefined;
   Registro: undefined;
-  Registro2: undefined;
+  Registro2: { nombre: string; apellido: string; dni: string; telefono: string; };
   Home: undefined;
   PlanNutricional: undefined;
   RutinaDeEjercicios: undefined;
   Notas: undefined;
   DetalleNotas: undefined;
+  ChatBot: undefined;
   ListaTurnos: undefined;
   AgregarTurno: undefined;
   EditarTurno: { id: string };
@@ -56,6 +58,7 @@ export default function App() {
         <Stack.Screen name="RutinaDeEjercicios" component={RutinaDeEjercicios} options={{headerShown: false}}/>
         <Stack.Screen name="Notas" component={Notas} options={{headerShown: false}}/>
         <Stack.Screen name="DetalleNotas" component={DetalleNotas} options={{headerShown: false}}/>
+        <Stack.Screen name="ChatBot" component={ChatBot} options={{headerShown: false}}/>
         <Stack.Screen name="ListaTurnos" component={ListaTurnos} options={{ title: "Lista de Turnos" }} />
         <Stack.Screen name="AgregarTurno" component={AgregarTurno} options={{ title: "Crear Turno" }} />
         <Stack.Screen name="EditarTurno" component={EditarTurno} options={{ title: "Editar Turno" }} />

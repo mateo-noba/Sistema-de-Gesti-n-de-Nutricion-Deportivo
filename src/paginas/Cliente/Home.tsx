@@ -1,39 +1,128 @@
-import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Alert } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
-import PlanNutricional from "./PlanNutricional";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, "Home">;
-const Home = () =>{
+
+// Interface para el turno que viene del Backend
+interface ITurno {
+  id_turno: number;
+  fecha: string;
+  hora: string;
+  estado: string;
+  profesional_nombre?: string;
+  profesional_apellido?: string;
+}
+
+const Home = () => {
 
   const navigation = useNavigation<HomeScreenProp>();
 
-  return(
+  const [turno, setTurno] = useState<ITurno | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Cargar los datos del turno al entrar a la pantalla
+  useEffect(() => {
+    const obtenerTurnoBD = async () => {
+      try {
+        // 1. Leemos el ID de usuario guardado en el Login
+        const userId = await AsyncStorage.getItem("userId");
+
+        if (!userId) {
+          Alert.alert("Sesión vencida", "Por favor iniciá sesión nuevamente.");
+          navigation.navigate("Login");
+          return;
+        }
+
+        // 2. Hacemos el fetch enviando el id_usuario en los query params
+        // (Asegurate de poner la IP local de tu PC)
+        const response = await fetch(`http://192.168.x.x:3000/api/turnos?id_usuario=${userId}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setTurno(data);
+        } else {
+          console.log("Mensaje API:", data.mensaje);
+        }
+      } catch (error) {
+        console.error("Error al cargar turno:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    obtenerTurnoBD();
+  }, []);
+
+  return (
     <View style={styles.container}>
-        
-        <TouchableOpacity style={styles.botonNotas} onPress={() => navigation.navigate("Notas")}></TouchableOpacity>
-        <TouchableOpacity style={styles.botonChatbot}><Image source={require("../../../assets/ensaladin.png")} style={styles.imagenChatbot}/></TouchableOpacity>
-    
-        <View style={styles.contenedorHome}>
-            <Image source={require("../../../assets/IconoCuenta.svg")} style={styles.iconoCuenta} />
-            <Text style={styles.titulo}>Nombre apellido</Text>
-            <Text style={styles.titulo}>Día del turno:</Text>
-            <Text style={styles.titulo}>Hora del turno:</Text>
-            <View style={styles.contenedorHorizontal}>
-                <TouchableOpacity style={styles.botonPlan} onPress={() => navigation.navigate("PlanNutricional")}>Plan nutricional</TouchableOpacity>
-                <TouchableOpacity style={styles.botonRutina} onPress={() => navigation.navigate("RutinaDeEjercicios")}>Rutina de ejercicios</TouchableOpacity>
-                <TouchableOpacity style={styles.botonCancelar}>Cancelar turno</TouchableOpacity>
-            </View>
-    
+      {/* Botón Notas */}
+      <TouchableOpacity 
+        style={styles.botonNotas} 
+        onPress={() => navigation.navigate("Notas")}
+      >
+        <Text style={styles.textoBotonSecundario}>Notas</Text>
+      </TouchableOpacity>
+
+      {/* Botón Chatbot */}
+      <TouchableOpacity style={styles.botonChatbot}>
+        <Image 
+          source={require("../../../assets/ensaladin.png")} 
+          style={styles.imagenChatbot} 
+        />
+      </TouchableOpacity>
+
+      {/* Contenedor Principal */}
+      <View style={styles.contenedorHome}>
+        {/* Usar preferentemente PNG o JPG si usás Image de React Native */}
+        <Image 
+          source={require("../../../assets/IconoCuenta.svg")} 
+          style={styles.iconoCuenta} 
+        />
+
+        {loading ? (
+          <ActivityIndicator size="large" color="#4db6ac" style={{ marginTop: 20 }} />
+        ) : turno ? (
+          <>
+            <Text style={styles.subtituloProfesor}>
+              Nutricionista: {turno.profesional_nombre} {turno.profesional_apellido}
+            </Text>
+            <Text style={styles.titulo}>
+              Día del turno: {new Date(turno.fecha).toLocaleDateString("es-AR")}
+            </Text>
+            <Text style={styles.titulo}>Hora del turno: {turno.hora} hs</Text>
+          </>
+        ) : (
+          <Text style={styles.titulo}>No tenés turnos pendientes</Text>
+        )}
+
+        {/* Acciones */}
+        <View style={styles.contenedorHorizontal}>
+          <TouchableOpacity 
+            style={styles.botonPlan} 
+            onPress={() => navigation.navigate("PlanNutricional")}
+          >
+            <Text style={styles.textoBoton}>Plan nutricional</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.botonRutina} 
+            onPress={() => navigation.navigate("RutinaDeEjercicios")}
+          >
+            <Text style={styles.textoBoton}>Rutina de ejercicios</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.botonCancelar}>
+            <Text style={styles.textoBoton}>Cancelar turno</Text>
+          </TouchableOpacity>
         </View>
+      </View>
     </View>
-
-
   );
-}
-
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -42,153 +131,98 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
   },
+  contenedorHome: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+    width: "100%", // Se ajustó a 100% para evitar desbordes en pantallas móviles
+    borderRadius: 10,
+    alignItems: "center",
+    padding: 15,
+  },
   titulo: {
     textAlign: "center",
-    marginBottom: 25,
-    fontSize: 32,
+    marginBottom: 15,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#333",
-    marginTop: 0,
   },
-  contenedor: {
-    flexDirection: "row",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    gap: 25,
+  subtituloProfesor: {
+    textAlign: "center",
+    marginBottom: 10,
+    fontSize: 18,
+    color: "#666",
   },
   contenedorHorizontal: {
     flexDirection: "row",
     justifyContent: "center",
     flexWrap: "wrap",
-    gap: 25,
-    marginTop: 50,
-  },
-  contenedorIzquierda: {
-    flexDirection: "row",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    gap: 25,
-  },
-  card: {
-    width: 230,
-    padding: 20,
-    backgroundColor: "#f5f5f5",
-    borderRadius: 12,
-    alignItems: "center",
-    margin: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  icono: {
-    fontSize: 45,
-    marginBottom: 10,
-  },
-  tituloCard: {
-    fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  descripcion: {
-    textAlign: "center",
-    marginTop: 5,
-    color: "#333",
-  },
-  contenedorHome: {
-    flex: 1,
-    backgroundColor: "#f5f5f5",
-    width: 1000,
-    height: 100,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 12,
-    padding: 10,
-    backgroundColor: "#fafafa",
-    width: 250,
+    gap: 15,
+    marginTop: 30,
   },
   botonPlan: {
-    backgroundColor: "#00ff2a",
+    backgroundColor: "#2e7d32",
     padding: 12,
     borderRadius: 10,
     alignItems: "center",
-    color:"#f5f5f5",
-    fontWeight: "bold",
-    fontSize: 20,
   },
   botonRutina: {
     backgroundColor: "#2a3de2",
     padding: 12,
     borderRadius: 10,
     alignItems: "center",
-    color:"#f5f5f5",
-    fontWeight: "bold",
-    fontSize: 20,
   },
   botonCancelar: {
-    backgroundColor: "#ff0000",
+    backgroundColor: "#d32f2f",
     padding: 12,
     borderRadius: 10,
     alignItems: "center",
-    color:"#f5f5f5",
+  },
+  textoBoton: {
+    color: "#ffffff",
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 16,
   },
   botonNotas: {
     backgroundColor: "#f6cf66",
     padding: 12,
     borderRadius: 10,
     alignItems: "center",
-    color:"#f5f5f5",
-    fontWeight: "bold",
-    fontSize: 20,
-    alignSelf: "flex-start",
+    justifyContent: "center",
     position: "absolute",
-    height: 110,
-    width: 110,
+    top: 20,
+    left: 20,
+    height: 60,
+    width: 60,
+    zIndex: 10,
   },
-   botonChatbot: {
+  textoBotonSecundario: {
+    color: "#333",
+    fontWeight: "bold",
+    fontSize: 12,
+  },
+  botonChatbot: {
     backgroundColor: "#444a4a",
-    padding: 12,
+    padding: 10,
     borderRadius: 100,
     alignItems: "center",
-    color:"#f5f5f5",
-    fontWeight: "bold",
-    fontSize: 20,
-    alignSelf: "flex-end",
+    justifyContent: "center",
     position: "absolute",
-    height: 80,
-    width: 80,
+    bottom: 30,
+    right: 20,
+    height: 70,
+    width: 70,
+    zIndex: 10,
   },
-  contenedorFormulario:{
-    marginTop: 50,
+  iconoCuenta: {
+    width: 100,
+    height: 100,
+    marginTop: 40,
+    marginBottom: 20,
   },
-  textoInicioSesion:{
-    marginTop: 10,
+  imagenChatbot: {
+    width: 50,
+    height: 50,
   },
-  textoChico:{
-    fontSize: 11,
-    marginBottom: 30,
-  },
-  iconoCuenta:{
-    width: 150,
-    height: 150,
-    color: "#040505",
-    marginTop: 100,
-  },
-  imagenChatbot:{
-    width: 60,
-    height: 60,
-  },
-  link:{
-    color: "#0004d8"
-
-  }
 });
 
 export default Home;

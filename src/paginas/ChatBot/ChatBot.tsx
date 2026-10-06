@@ -5,147 +5,20 @@ import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react"
 import { RootStackParamList } from "../../../App";
 
-type NotasScreenProp = NativeStackNavigationProp<RootStackParamList, "Notas">;
-const Notas = () =>{
+type ChatBotScreenProp = NativeStackNavigationProp<RootStackParamList, "ChatBot">;
+const ChatBot = () =>{
 
-  const navigation = useNavigation<NotasScreenProp>();
-  const [notas, setNotas] = useState([
-    {
-      id:1,
-      titulo:"Control inicial",
-      contenido: "Contenido 1",
-      fecha:"16/06/2026",
-      pacienteId:"p1",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    
-  ])
+  const navigation = useNavigation<ChatBotScreenProp>();
+  
 
   return(
     <View style={styles.container}>
-        <View style={styles.contenedorBotones}>
-          <View style={styles.botonesIzquierda}>
-            <TouchableOpacity style={styles.botonAtras} onPress={() => navigation.goBack()}><Image source={require("../../../assets/flechaAtras.png")} style={styles.imagenFlecha}/></TouchableOpacity>
-          </View>
-          <TouchableOpacity style={styles.botonChatbot} onPress={() => navigation.navigate("ChatBot")}><Image source={require("../../../assets/ensaladin.png")} style={styles.imagenChatbot} /></TouchableOpacity>
-        </View>
-    
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.contenedorNotas} style={styles.contenedorScroll}>
-            {notas.map((nota) => (
-                <TouchableOpacity
-                  key={nota.id}
-                  style={styles.notas}
-                  onPress={() => navigation.navigate("DetalleNotas")}
-                >
-                  <Text>{nota.titulo}</Text>
-                  <Text>{nota.fecha}</Text>
-                </TouchableOpacity>
-            ))}
-        </ScrollView>
+        <view style={styles.contenedorIzquierda}>
+
+        </view>
+        <view style={styles.contenedorDerecha}>
+            
+        </view>
     </View>
 
 
@@ -156,8 +29,8 @@ const Notas = () =>{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#4db6ac",
-    padding: 20,
+    backgroundColor: "#232827",
+    flexDirection: "row",
     alignItems: "center",
   },
   titulo: {
@@ -182,10 +55,15 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   contenedorIzquierda: {
-    flexDirection: "row",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    gap: 25,
+    height: "100%",
+    width: "20%",
+    backgroundColor: "#e7edec",
+    
+  },
+  contenedorDerecha: {
+    height: "100%",
+    width: "80%",
+    
   },
   contenedorBotones:{
     flexDirection: "row",
@@ -354,4 +232,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Notas;
+export default ChatBot;
