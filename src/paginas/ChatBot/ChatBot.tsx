@@ -13,12 +13,19 @@ const ChatBot = () =>{
 
   return(
     <View style={styles.container}>
-        <view style={styles.contenedorIzquierda}>
+        <View style={styles.contenedorIzquierda}>
 
-        </view>
-        <view style={styles.contenedorDerecha}>
-            
-        </view>
+        </View>
+        <ScrollView style={styles.contenedorDerecha}>
+          <View style={styles.contenedorChat}>
+            <Text style={styles.textPregunta}>hola Lorem Lorem Lorem hola Lorem Lorem Lorem hola Lorem Lorem Lorem hola Lorem Lorem Lorem</Text>
+            <Text style={styles.textRespuesta}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt aliquam cum error! Asperiores debitis qui tempora quisquam vitae facilis rerum repellat consectetur ut. Maxime eveniet repellat soluta dignissimos quae consequatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis exercitationem vitae cum nam iure dignissimos officia, quam dolore ea nihil sed assumenda aut inventore et fugit tempore voluptate, veritatis impedit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus laborum exercitationem sapiente iure, sint, doloribus, distinctio quos laboriosam labore ipsa ex voluptas? Fuga earum voluptas enim magni explicabo amet id? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam facilis vel hic repellendus voluptatem veritatis explicabo enim, consequatur atque itaque quidem assumenda vero necessitatibus sint perspiciatis possimus at debitis voluptatibus?</Text>
+          </View>
+            <View style={styles.contenedorMensaje}>
+              <TextInput placeholder="Escriba un mensaje..." multiline maxLength={500 } style={styles.textboxMensaje}></TextInput>
+              <TouchableOpacity style={styles.botonEnviar}><Image source={require("../../../assets/flechaEnviar.svg")}/></TouchableOpacity>
+            </View>
+        </ScrollView>
     </View>
 
 
@@ -31,7 +38,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#232827",
     flexDirection: "row",
-    alignItems: "center",
   },
   titulo: {
     textAlign: "center",
@@ -55,15 +61,62 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   contenedorIzquierda: {
-    height: "100%",
     width: "20%",
     backgroundColor: "#e7edec",
-    
   },
-  contenedorDerecha: {
-    height: "100%",
+  // contenedorDerecha: {
+  //   width: "80%",
+  //   flex: 1,
+  //   alignItems: "flex-end",
+  //   borderColor: "#32bea7",
+  //   borderWidth: 1,
+  // },
+  contenedorChat: {
+    height: "60%",
     width: "80%",
+    marginTop: 100,
+    marginBottom: 0,
+    marginRight: 100,
+    marginLeft: 100,
+  },
+  textRespuesta: {
+    fontSize: 17,
+    color: "#e7edec",
+  },
+  textPregunta: {
+    fontSize: 17,
+    color: "#e7edec",
+    backgroundColor: "#6b7472",
+    width: "auto",
+    maxWidth: 400,
+    alignSelf: "flex-end",
+    padding: 5,
+    borderRadius: 10,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  contenedorMensaje:{
     
+    width: "80%",
+    borderColor: "#e7edec",
+    borderWidth: 1,
+    borderRadius: 20,
+    height: 100,
+    flexDirection: "row",
+    alignSelf: "center",
+  },
+  textboxMensaje: {
+    height: "30%",
+    width: "97%",
+    color: "#e7edec",
+  },
+  botonEnviar: {
+    backgroundColor: "#e7edec",
+    borderRadius: "100%",
+    height: 30,
+    width: 30,
+    justifyContent: "center",
+    alignItems: "center",
   },
   contenedorBotones:{
     flexDirection: "row",
