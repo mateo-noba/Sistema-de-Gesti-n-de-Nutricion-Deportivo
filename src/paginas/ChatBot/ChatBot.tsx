@@ -13,22 +13,60 @@ const ChatBot = () =>{
 
   return(
     <View style={styles.container}>
-        <View style={styles.contenedorIzquierda}>
-
+      <View style={styles.contenedorIzquierda}>
+        <View style={styles.botonesMenu}>
+          <TouchableOpacity style={styles.botonAtras} onPress={() => navigation.goBack()}><Image source={require("../../../assets/flechaAtras.png")} style={styles.imagenFlecha}/></TouchableOpacity>
+          <Text>Nombre del chat</Text>
+          <TouchableOpacity style={styles.botonAtras}><Image source={require("../../../assets/menu.png")}/></TouchableOpacity>
         </View>
-        <ScrollView style={styles.contenedorDerecha}>
+        <TouchableOpacity style={styles.botonNuevoChat}><Image style={styles.imagenMas} source={require("../../../assets/simboloMas.png")}/><Text style={styles.textoNuevoChat}>Nuevo chat</Text></TouchableOpacity>
+        <Text style={styles.textoChat}>Chats</Text>
+        <ScrollView>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
+        </ScrollView>
+      </View>
+
+      <View style={styles.contenedorDerecha}>
+        <ScrollView style={styles.scrollChat} contentContainerStyle={styles.scrollChatContenido}>
           <View style={styles.contenedorChat}>
             <Text style={styles.textPregunta}>hola Lorem Lorem Lorem hola Lorem Lorem Lorem hola Lorem Lorem Lorem hola Lorem Lorem Lorem</Text>
-            <Text style={styles.textRespuesta}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt aliquam cum error! Asperiores debitis qui tempora quisquam vitae facilis rerum repellat consectetur ut. Maxime eveniet repellat soluta dignissimos quae consequatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis exercitationem vitae cum nam iure dignissimos officia, quam dolore ea nihil sed assumenda aut inventore et fugit tempore voluptate, veritatis impedit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus laborum exercitationem sapiente iure, sint, doloribus, distinctio quos laboriosam labore ipsa ex voluptas? Fuga earum voluptas enim magni explicabo amet id? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam facilis vel hic repellendus voluptatem veritatis explicabo enim, consequatur atque itaque quidem assumenda vero necessitatibus sint perspiciatis possimus at debitis voluptatibus?</Text>
+            <Text style={styles.textRespuesta}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt aliquam cum error! Asperiores debitis qui tempora quisquam vitae facilis rerum repellat consectetur ut. Maxime eveniet repellat soluta dignissimos quae consequatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis exercitationem vitae cum nam iure dignissimos officia, quam dolore ea nihil sed assumenda aut inventore et fugit tempore voluptate, veritatis impedit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus laborum exercitationem sapiente iure, sint, doloribus, distinctio quos laboriosam labore ipsa ex voluptas? Fuga earum voluptas enim magni explicabo amet id? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam facilis vel hic repellendus voluptatem veritatis explicabo enim, consequatur atque itaque quidem assumenda vero necessitatibus sint perspiciatis possimus at debitis voluptatibus?
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt aliquam cum error! Asperiores debitis qui tempora quisquam vitae facilis rerum repellat consectetur ut. Maxime eveniet repellat soluta dignissimos quae consequatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis exercitationem vitae cum nam iure dignissimos officia, quam dolore ea nihil sed assumenda aut inventore et fugit tempore voluptate, veritatis impedit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus laborum exercitationem sapiente iure, sint, doloribus, distinctio quos laboriosam labore ipsa ex voluptas? Fuga earum voluptas enim magni explicabo amet id? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam facilis vel hic repellendus voluptatem veritatis explicabo enim, consequatur atque itaque quidem assumenda vero necessitatibus sint perspiciatis possimus at debitis voluptatibus?
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt aliquam cum error! Asperiores debitis qui tempora quisquam vitae facilis rerum repellat consectetur ut. Maxime eveniet repellat soluta dignissimos quae consequatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis exercitationem vitae cum nam iure dignissimos officia, quam dolore ea nihil sed assumenda aut inventore et fugit tempore voluptate, veritatis impedit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus laborum exercitationem sapiente iure, sint, doloribus, distinctio quos laboriosam labore ipsa ex voluptas? Fuga earum voluptas enim magni explicabo amet id? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam facilis vel hic repellendus voluptatem veritatis explicabo enim, consequatur atque itaque quidem assumenda vero necessitatibus sint perspiciatis possimus at debitis voluptatibus?
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt aliquam cum error! Asperiores debitis qui tempora quisquam vitae facilis rerum repellat consectetur ut. Maxime eveniet repellat soluta dignissimos quae consequatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis exercitationem vitae cum nam iure dignissimos officia, quam dolore ea nihil sed assumenda aut inventore et fugit tempore voluptate, veritatis impedit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus laborum exercitationem sapiente iure, sint, doloribus, distinctio quos laboriosam labore ipsa ex voluptas? Fuga earum voluptas enim magni explicabo amet id? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam facilis vel hic repellendus voluptatem veritatis explicabo enim, consequatur atque itaque quidem assumenda vero necessitatibus sint perspiciatis possimus at debitis voluptatibus?
+            </Text>
           </View>
-            <View style={styles.contenedorMensaje}>
-              <TextInput placeholder="Escriba un mensaje..." multiline maxLength={500 } style={styles.textboxMensaje}></TextInput>
-              <TouchableOpacity style={styles.botonEnviar}><Image source={require("../../../assets/flechaEnviar.svg")}/></TouchableOpacity>
-            </View>
         </ScrollView>
+
+        <View style={styles.zonaMensaje}>
+          <View style={styles.contenedorMensaje}>
+            <TextInput placeholder="Escriba un mensaje..." multiline maxLength={500 } style={styles.textboxMensaje}></TextInput>
+            <TouchableOpacity style={styles.botonEnviar}><Image source={require("../../../assets/fechaArriba.png")}/></TouchableOpacity> 
+          </View>
+        </View>
+      </View>
     </View>
-
-
   );
 }
 
@@ -64,21 +102,55 @@ const styles = StyleSheet.create({
     width: "20%",
     backgroundColor: "#e7edec",
   },
-  // contenedorDerecha: {
-  //   width: "80%",
-  //   flex: 1,
-  //   alignItems: "flex-end",
-  //   borderColor: "#32bea7",
-  //   borderWidth: 1,
-  // },
-  contenedorChat: {
-    height: "60%",
-    width: "80%",
-    marginTop: 100,
-    marginBottom: 0,
-    marginRight: 100,
-    marginLeft: 100,
+  contenedorDerecha: {
+    flex: 1,
+    flexDirection: "column",
   },
+  scrollChat: {
+    flex: 1,
+  },
+  scrollChatContenido: {
+    alignItems: "center",
+    paddingTop: 60,
+    paddingBottom: 20,
+  },
+  contenedorChat: {
+    width: "100%",
+    maxWidth: 800,
+    paddingHorizontal: 20,
+  },
+  zonaMensaje: {
+    position: "absolute",
+    bottom: 0,
+    left: 15,
+    right: 15,
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingBottom: 30,
+    pointerEvents: "box-none",
+    zIndex: 1,
+    backgroundColor: "#232827",
+  },
+  contenedorMensaje: {
+    width: "100%",
+    maxWidth: 800,
+    borderColor: "#e7edec",
+    borderWidth: 1,
+    borderRadius: 20,
+    minHeight: 60,
+    maxHeight: 200,
+    flexDirection: "row",
+    alignItems: "flex-end",
+    padding: 10,
+    gap: 10,
+  },
+  textboxMensaje: {
+    flex: 1,
+    color: "#e7edec",
+    fontSize: 16,
+    paddingHorizontal: 5,
+    outlineStyle: "none",
+  } as any,
   textRespuesta: {
     fontSize: 17,
     color: "#e7edec",
@@ -88,31 +160,16 @@ const styles = StyleSheet.create({
     color: "#e7edec",
     backgroundColor: "#6b7472",
     width: "auto",
-    maxWidth: 400,
+    maxWidth: 600,
     alignSelf: "flex-end",
     padding: 5,
     borderRadius: 10,
     marginTop: 20,
     marginBottom: 20,
   },
-  contenedorMensaje:{
-    
-    width: "80%",
-    borderColor: "#e7edec",
-    borderWidth: 1,
-    borderRadius: 20,
-    height: 100,
-    flexDirection: "row",
-    alignSelf: "center",
-  },
-  textboxMensaje: {
-    height: "30%",
-    width: "97%",
-    color: "#e7edec",
-  },
   botonEnviar: {
     backgroundColor: "#e7edec",
-    borderRadius: "100%",
+    borderRadius: 15,
     height: 30,
     width: 30,
     justifyContent: "center",
@@ -172,14 +229,6 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 30,
   },
-  notas:{
-    backgroundColor: "#fff79d",
-    width: "13.1%",
-    aspectRatio: 1,
-    marginBottom: 20,
-    justifyContent: "center",
-    alignItems: "center"
-  },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
@@ -187,57 +236,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#fafafa",
     width: 250,
-  },
-  botonPlan: {
-    backgroundColor: "#00ff2a",
-    padding: 12,
-    borderRadius: 10,
-    alignItems: "center",
-    color:"#f5f5f5",
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-  botonRutina: {
-    backgroundColor: "#2a3de2",
-    padding: 12,
-    borderRadius: 10,
-    alignItems: "center",
-    color:"#f5f5f5",
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-  botonCancelar: {
-    backgroundColor: "#ff0000",
-    padding: 12,
-    borderRadius: 10,
-    alignItems: "center",
-    color:"#f5f5f5",
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-  botonDescarga: {
-    backgroundColor: "#2a9ee2",
-    padding: 14,
-    borderRadius: 10,
-    alignItems: "center",
-    color:"#f5f5f5",
-    fontWeight: "bold",
-    fontSize: 19,
-    
-    height: 50,
-    width: 270,
-  },
-   botonChatbot: {
-    backgroundColor: "#444a4a",
-    padding: 12,
-    borderRadius: 100,
-    alignItems: "center",
-    color:"#f5f5f5",
-    fontWeight: "bold",
-    fontSize: 20,
-    
-    height: 80,
-    width: 80,
   },
   botonAtras:{
     padding: 14,
@@ -247,14 +245,41 @@ const styles = StyleSheet.create({
     color:"#f5f5f5",
     fontWeight: "bold",
     fontSize: 19,
-
     height: 40,
     width: 40,
+  },
+  botonesMenu: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  botonNuevoChat: {
+    width: "100%",
+    flexDirection: "row",
+    borderRadius: 10,
+  },
+  imagenMas: {
+    marginLeft: 0,
+  },
+  textoNuevoChat: {
+    marginTop: 1.5,
+  },
+  botonChats: {
+    width: "100%",
+    height: 30,
+    marginBottom: 0.4,
+    alignItems: "center",
+    flexDirection: "row",
+    borderRadius: 10,
+  },
+  textoBotonChat: {
+    marginLeft: 10,
+    marginBottom: 1.5,
   },
   contenedorFormulario:{
     marginTop: 50,
   },
-  textoInicioSesion:{
+  textoChat:{
     marginTop: 10,
   },
   textoChico:{
