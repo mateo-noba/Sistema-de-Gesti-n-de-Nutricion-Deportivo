@@ -1,5 +1,5 @@
 import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image, ScrollView } from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image, ScrollView, Pressable } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react"
@@ -9,45 +9,41 @@ type ChatBotScreenProp = NativeStackNavigationProp<RootStackParamList, "ChatBot"
 const ChatBot = () =>{
 
   const navigation = useNavigation<ChatBotScreenProp>();
+  const [menuAbierto, setMenuAbierto] = useState(true);
   
 
   return(
     <View style={styles.container}>
-      <View style={styles.contenedorIzquierda}>
-        <View style={styles.botonesMenu}>
-          <TouchableOpacity style={styles.botonAtras} onPress={() => navigation.goBack()}><Image source={require("../../../assets/flechaAtras.png")} style={styles.imagenFlecha}/></TouchableOpacity>
-          <Text>Nombre del chat</Text>
-          <TouchableOpacity style={styles.botonAtras}><Image source={require("../../../assets/menu.png")}/></TouchableOpacity>
+
+      {menuAbierto && (
+        <View style={styles.contenedorIzquierda}>
+          <View style={styles.botonesMenu}>
+            <TouchableOpacity style={styles.botonAtras} onPress={() => navigation.goBack()}><Image source={require("../../../assets/flechaAtras.png")} style={styles.imagenFlecha}/></TouchableOpacity>
+            <Text>Nombre del chat</Text>
+          </View>
+          <Pressable style={({hovered}: any) => [styles.botonNuevoChat, hovered && styles.botonHover]}><Image style={styles.imagenMas} source={require("../../../assets/simboloMas.png")}/><Text style={styles.textoNuevoChat}>Nuevo chat</Text></Pressable>
+          <Text style={styles.textoChat}>Chats</Text>
+          <ScrollView>
+            <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
+            <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
+            <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
+            <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
+            <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
+            <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
+            <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
+            <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
+            <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
+            <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
+          </ScrollView>
+          <View style={styles.contenedorCuenta}>
+            <Image source={require("../../../assets/iconoCuenta.png")}/>
+            <Text> Nombre del usuario</Text>
+          </View>
         </View>
-        <TouchableOpacity style={styles.botonNuevoChat}><Image style={styles.imagenMas} source={require("../../../assets/simboloMas.png")}/><Text style={styles.textoNuevoChat}>Nuevo chat</Text></TouchableOpacity>
-        <Text style={styles.textoChat}>Chats</Text>
-        <ScrollView>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.botonChats}><Text style={styles.textoBotonChat}>Hola lorem</Text></TouchableOpacity>
-        </ScrollView>
-      </View>
+      )}
 
       <View style={styles.contenedorDerecha}>
+        <TouchableOpacity style={styles.botonMenu} onPress={() => setMenuAbierto(!menuAbierto)}><Image source={require("../../../assets/menu.png")}/></TouchableOpacity>
         <ScrollView style={styles.scrollChat} contentContainerStyle={styles.scrollChatContenido}>
           <View style={styles.contenedorChat}>
             <Text style={styles.textPregunta}>hola Lorem Lorem Lorem hola Lorem Lorem Lorem hola Lorem Lorem Lorem hola Lorem Lorem Lorem</Text>
@@ -189,6 +185,13 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     overflow: "hidden",
   },
+  contenedorCuenta: {
+    flexDirection: "row",
+    alignItems: "center",
+    height: 60,
+    borderTopWidth: 0.5,
+    borderColor: "#232827",
+  },
   botonesIzquierda:{
     flexDirection: "row",
     alignItems: "center",
@@ -248,15 +251,29 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
   },
+  botonMenu: {
+    padding: 14,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    color:"#f5f5f5",
+    backgroundColor: "#1e1f1f",
+    fontWeight: "bold",
+    fontSize: 19,
+    height: 40,
+    width: 40,
+  },
   botonesMenu: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
   },
   botonNuevoChat: {
     width: "100%",
     flexDirection: "row",
     borderRadius: 10,
+  },
+  botonHover: {
+    backgroundColor: "#e0e0e0",
   },
   imagenMas: {
     marginLeft: 0,

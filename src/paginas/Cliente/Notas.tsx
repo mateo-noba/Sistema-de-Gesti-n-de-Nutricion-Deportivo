@@ -243,9 +243,8 @@ const styles = StyleSheet.create({
   },
   notas:{
     backgroundColor: "#fff79d",
-    width: "13.1%",
+    width: 170,
     aspectRatio: 1,
-    marginBottom: 20,
     justifyContent: "center",
     alignItems: "center"
   },

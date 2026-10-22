@@ -79,7 +79,7 @@ const Home = () => {
       <View style={styles.contenedorHome}>
         {/* Usar preferentemente PNG o JPG si usás Image de React Native */}
         <Image 
-          source={require("../../../assets/IconoCuenta.svg")} 
+          source={require("../../../assets/iconoCuenta.png")} 
           style={styles.iconoCuenta} 
         />
 
