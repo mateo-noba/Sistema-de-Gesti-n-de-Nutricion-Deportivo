@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { pool } from './config/db';
 import turnoRoutes from './routes/turnoRoutes';
+import authRoutes from './routes/authRoutes';
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 // Rutas
 app.use('/api/turnos', turnoRoutes);
+app.use('/api', authRoutes);
 // Ruta de prueba
 app.get('/api/health', async (req, res) => {
   try {

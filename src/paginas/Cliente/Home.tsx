@@ -68,7 +68,7 @@ const Home = () => {
       </TouchableOpacity>
 
       {/* Botón Chatbot */}
-      <TouchableOpacity style={styles.botonChatbot}>
+      <TouchableOpacity style={styles.botonChatbot} onPress={() => navigation.navigate("ChatBot")}>
         <Image 
           source={require("../../../assets/ensaladin.png")} 
           style={styles.imagenChatbot} 
@@ -133,7 +133,8 @@ const styles = StyleSheet.create({
   },
   contenedorHome: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    marginTop: 20,
+    backgroundColor: "#4db6ac",
     width: "100%", // Se ajustó a 100% para evitar desbordes en pantallas móviles
     borderRadius: 10,
     alignItems: "center",
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
-    bottom: 30,
+    top: 20,
     right: 20,
     height: 70,
     width: 70,

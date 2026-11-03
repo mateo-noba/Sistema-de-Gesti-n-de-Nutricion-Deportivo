@@ -11,46 +11,49 @@ type LoginScreenProp = NativeStackNavigationProp<RootStackParamList, "Login">;
 const Login = () => {
   const navigation = useNavigation<LoginScreenProp>();
   
-  // Estados para capturar el texto ingresado
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Por favor ingresá tu email y contraseña");
-      return;
-    }
+  if (!email || !password) {
+    Alert.alert("Error", "Por favor ingresá tu email y contraseña");
+    return;
+  }
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      // Reemplazá 192.168.X.X por la IP local de tu PC donde corre Express
-      const response = await fetch(`${API_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+  try {
+    const response = await fetch(`${API_URL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      // Verificamos data.id_usuario (que es la clave que devuelve tu Express)
-      if (response.ok && data.id_usuario) {
-        // Guardamos el id_usuario en AsyncStorage
-        await AsyncStorage.setItem("userId", String(data.id_usuario));
-
-        // Navegamos a Home
-        navigation.navigate("Home");
-      } else {
-        Alert.alert("Error de autenticación", data.mensaje || "Credenciales incorrectas");
+    if (response.ok && data.id_usuario) {
+      await AsyncStorage.setItem("userId", String(data.id_usuario));
+      if (data.tipo_usuario) {
+        await AsyncStorage.setItem("userRole", data.tipo_usuario);
       }
-    } catch (error) {
-      console.error("Error en login:", error);
-      Alert.alert("Error", "Ocurrió un problema al conectar con el servidor");
-    } finally {
-      setLoading(false);
+
+      // Redirección según rol
+      if (data.tipo_usuario === "profesional") {
+        navigation.navigate("Inicio");
+      } else {
+        navigation.navigate("Home");
+      }
+    } else {
+      Alert.alert("Error", data.mensaje || "Credenciales incorrectas");
     }
-  };
+  } catch (error) {
+    console.error("Error en login:", error);
+    Alert.alert("Error de Conexión", "No se pudo conectar con el servidor. Revisá la red/Wi-Fi.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <View style={styles.container}>
@@ -82,7 +85,6 @@ const Login = () => {
             </Text>
           </Text>
 
-          {/* Botón adaptado para mostrar un loader mientras consulta al servidor */}
           <TouchableOpacity 
             style={styles.boton} 
             onPress={handleLogin}
