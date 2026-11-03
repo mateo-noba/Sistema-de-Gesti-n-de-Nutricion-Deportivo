@@ -1,5 +1,5 @@
 import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image, ScrollView } from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image, ScrollView, useWindowDimensions } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react"
@@ -9,6 +9,14 @@ type NotasScreenProp = NativeStackNavigationProp<RootStackParamList, "Notas">;
 const Notas = () =>{
 
   const navigation = useNavigation<NotasScreenProp>();
+  const GAP = 20;
+  const PADDING = 20;
+  
+  const {width} = useWindowDimensions();
+  const COLUMNAS = width > 1200 ? 6 : width > 800 ? 4 : 2;
+  const anchoDisponible = width - 40 - PADDING * 2;
+  const anchoNota = (anchoDisponible - GAP * (COLUMNAS - 1)) / COLUMNAS;
+
   const [notas, setNotas] = useState([
     {
       id:1,
@@ -138,7 +146,7 @@ const Notas = () =>{
             {notas.map((nota) => (
                 <TouchableOpacity
                   key={nota.id}
-                  style={styles.notas}
+                  style={[styles.notas, {width: anchoNota}]}
                   onPress={() => navigation.navigate("DetalleNotas")}
                 >
                   <Text>{nota.titulo}</Text>
