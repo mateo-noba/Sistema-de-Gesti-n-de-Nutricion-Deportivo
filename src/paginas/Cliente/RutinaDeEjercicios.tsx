@@ -20,7 +20,7 @@ const RutinaDeEjercicios = () =>{
         </View>
     
         <View style={styles.contenedorRutinaDeEjercicios}>
-            <Image style={styles.imagenRutinaDeEjercicios} source={require("../../../assets/rutinaDeEjercicios.jpg")}/>
+            <Image style={styles.imagenRutinaDeEjercicios} source={require("../../../assets/rutinaDeEjercicios.jpg")} resizeMode="contain"/>
         </View>
     </View>
 
@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     width: 550,
     height: 600,
-    marginBottom: 100,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",

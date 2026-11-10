@@ -39,7 +39,7 @@ const Home = () => {
 
         // 2. Hacemos el fetch enviando el id_usuario en los query params
         // (Asegurate de poner la IP local de tu PC)
-        const response = await fetch(`http://192.168.x.x:3000/api/turnos?id_usuario=${userId}`);
+        const response = await fetch(`http://localhost:3000/api/mis-turnos?id_usuario=${userId}`);
         const data = await response.json();
 
         if (response.ok) {
@@ -64,7 +64,7 @@ const Home = () => {
         style={styles.botonNotas} 
         onPress={() => navigation.navigate("Notas")}
       >
-        <Text style={styles.textoBotonSecundario}>Notas</Text>
+        <Text style={styles.textoBotonSecundario}>Avances</Text>
       </TouchableOpacity>
 
       {/* Botón Chatbot */}
@@ -79,25 +79,27 @@ const Home = () => {
       <View style={styles.contenedorHome}>
         {/* Usar preferentemente PNG o JPG si usás Image de React Native */}
         <Image 
-          source={require("../../../assets/iconoCuenta.png")} 
+          source={require("../../../assets/iconoCuentaGrande.png")} 
           style={styles.iconoCuenta} 
         />
 
-        {loading ? (
-          <ActivityIndicator size="large" color="#4db6ac" style={{ marginTop: 20 }} />
-        ) : turno ? (
-          <>
-            <Text style={styles.subtituloProfesor}>
-              Nutricionista: {turno.profesional_nombre} {turno.profesional_apellido}
-            </Text>
-            <Text style={styles.titulo}>
-              Día del turno: {new Date(turno.fecha).toLocaleDateString("es-AR")}
-            </Text>
-            <Text style={styles.titulo}>Hora del turno: {turno.hora} hs</Text>
-          </>
-        ) : (
-          <Text style={styles.titulo}>No tenés turnos pendientes</Text>
-        )}
+        <View style={styles.contenedorInfo}>
+          {loading ? (
+            <ActivityIndicator size="large" color="#4db6ac" style={{ marginTop: 20 }} />
+          ) : turno ? (
+            <>
+              <Text style={styles.subtituloProfesor}>
+                Nutricionista: {turno.profesional_nombre} {turno.profesional_apellido}
+              </Text>
+              <Text style={styles.titulo}>
+                Día del turno: {new Date(turno.fecha).toLocaleDateString("es-AR")}
+              </Text>
+              <Text style={styles.titulo}>Hora del turno: {turno.hora} hs</Text>
+            </>
+          ) : (
+            <Text style={styles.titulo}>No tenés turnos pendientes</Text>
+          )}
+        </View>
 
         {/* Acciones */}
         <View style={styles.contenedorHorizontal}>
@@ -159,6 +161,12 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 15,
     marginTop: 30,
+  },
+  contenedorInfo: {
+    minHeight: 160,         
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
   },
   botonPlan: {
     backgroundColor: "#2e7d32",

@@ -20,7 +20,7 @@ const PlanNutricional = () =>{
         </View>
     
         <View style={styles.contenedorPlanNutricional}>
-            <Image style={styles.imagenPlanNutricional} source={require("../../../assets/planNutricional.jpg")}/>
+            <Image style={styles.imagenPlanNutricional} source={require("../../../assets/planNutricional.jpg")} resizeMode="contain"/>
         </View>
     </View>
 
@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     width: 740,
     height: 600,
-    marginBottom: 100,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",

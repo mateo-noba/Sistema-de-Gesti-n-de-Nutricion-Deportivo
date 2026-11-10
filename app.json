@@ -1,14 +1,14 @@
 {
   "expo": {
     "name": "Agenda de nutrición",
-    "slug": "Agenda de nutrición",
+    "slug": "Agenda-de-nutricion",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/AgendaNutricion.png",
+    "icon": "./assets/agendaIcono.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/AgendaNutricion.png",
+      "image": "./assets/agendaIcono.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,17 +17,17 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/AgendaNutricion.png",
+        "foregroundImage": "./assets/agendaIcono.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/AgendaNutricion.png"
+      "favicon": "./assets/agendaIcono.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "expo-status-bar"
     ]
   }
 }

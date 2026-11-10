@@ -7,7 +7,7 @@ const router: Router = Router();
 router.post("/login", login);
 
 // GET ${API_URL}/turnos?clienteId=123
-router.get("/turnos", obtenerTurnoPorUsuario);
+router.get("/mis-turnos", obtenerTurnoPorUsuario);
 
 // ¡Agregamos la ruta de registro!
 router.post('/registro', registrarUsuario);
