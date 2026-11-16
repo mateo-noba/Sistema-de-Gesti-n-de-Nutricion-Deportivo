@@ -8,6 +8,7 @@ import {
   Alert,
   StyleSheet,
   ActivityIndicator,
+  Platform
 } from "react-native";
 import { Turno } from "../../interfaces/Turno";
 import { obtenerTurnos, borrarTurno } from "../../servicios/turnoServicio";
@@ -42,27 +43,26 @@ const ListaTurnos = () => {
     cargarDatos();
   }, []);
 
+  const eliminar = async (id: string) => {
+    try {
+      await borrarTurno(id);
+      setTurnos((prev) => prev.filter((t) => t.id !== id));
+    } catch (error) {
+      Alert.alert("Error eliminando el turno");
+    }
+  };
+
   const manejarEliminar = (id: string) => {
-    Alert.alert(
-      "Confirmar",
-      "¿Seguro que querés eliminar este turno?",
-      [
-        { text: "Cancelar", style: "cancel" },
-        {
-          text: "Eliminar",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              await borrarTurno(id);
-              setTurnos((prev) => prev.filter((t) => t.id !== id));
-              Alert.alert("Turno eliminado con éxito");
-            } catch (error) {
-              Alert.alert("Error eliminando el turno");
-            }
-          },
-        },
-      ]
-    );
+    if (Platform.OS === "web") {
+      if (window.confirm("¿Seguro que querés eliminar este turno?")) {
+        eliminar(id);
+      }
+      return;
+    }
+    Alert.alert("Confirmar", "¿Seguro que querés eliminar este turno?", [
+      { text: "Cancelar", style: "cancel" },
+      { text: "Eliminar", style: "destructive", onPress: () => eliminar(id) },
+    ]);
   };
 
   const limpiarFiltros = () => {
@@ -78,7 +78,7 @@ const ListaTurnos = () => {
     const coincideNombre = filtroNombre === "" || t.nombrePaciente.toLowerCase().includes(filtroNombre);
     const coincideTelefono = filtroTelefono === "" || t.telefono.toLowerCase().includes(filtroTelefono);
     const coincideFecha = filtroFecha === "" || t.fecha === filtroFecha;
-    const coincideHora = filtroHora === "" || t.hora === filtroHora;
+    const coincideHora = filtroHora === "" || t.hora.startsWith(filtroHora);
     const coincideBusquedaGlobal =
       texto === "" ||
       t.nombrePaciente.toLowerCase().includes(texto) ||
@@ -150,7 +150,7 @@ const ListaTurnos = () => {
           renderItem={({ item }) => (
             <View style={styles.tarjeta}>
               <Text style={styles.nombre}>{item.nombrePaciente}</Text>
-              <Text>{item.fecha} {item.hora}</Text>
+              <Text>{item.fecha} {item.hora.slice(0,5)}</Text>
               <View style={styles.botonera}>
                 <TouchableOpacity
                   style={styles.botonEditar}

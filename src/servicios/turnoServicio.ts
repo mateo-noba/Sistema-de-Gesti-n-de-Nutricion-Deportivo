@@ -23,11 +23,11 @@ export const crearTurno = async (datos: any) => {
     body: JSON.stringify(datos),
   });
 
-  const resultado = await respuesta.json
+  const resultado = await respuesta.json();
 
   if (!respuesta.ok) {
 
-    throw new Error(resultado.error || "Error al crear turno");
+    throw new Error(resultado.mensaje || "Error al crear turno");
   }
   
   return respuesta.json();

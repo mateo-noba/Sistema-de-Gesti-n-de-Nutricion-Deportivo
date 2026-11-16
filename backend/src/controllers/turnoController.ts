@@ -1,10 +1,27 @@
 import { Request, Response } from 'express';
 import { pool } from '../config/db';
 
+
+const SELECT_TURNO = `
+  SELECT
+    CAST(t.id_turno AS CHAR) AS id,
+    t.id_turno,
+    t.id_paciente,
+    t.id_profesional,
+    t.fecha,
+    t.hora,
+    t.estado,
+    CONCAT(u.nombre, ' ', u.apellido) AS nombrePaciente,
+    u.telefono AS telefono
+  FROM turno t
+  LEFT JOIN paciente p ON t.id_paciente = p.id_paciente
+  LEFT JOIN usuario u ON p.id_usuario = u.id_usuario
+`;
+
 // Obtener todos los turnos
 export const obtenerTurnos = async (req: Request, res: Response) => {
   try {
-    const [turnos] = await pool.query('SELECT * FROM turno');
+    const [turnos] = await pool.query(`${SELECT_TURNO} ORDER BY t.fecha, t.hora`);
     res.json(turnos);
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al obtener los turnos', error });
@@ -15,7 +32,7 @@ export const obtenerTurnos = async (req: Request, res: Response) => {
 export const obtenerTurno = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const [turnos]: any = await pool.query('SELECT * FROM turno WHERE id_turno = ?', [id]);
+    const [turnos]: any = await pool.query(`${SELECT_TURNO} WHERE t.id_turno = ?`, [id]);
     
     if (turnos.length === 0) {
       return res.status(404).json({ mensaje: 'Turno no encontrado' });
