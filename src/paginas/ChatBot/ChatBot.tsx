@@ -69,7 +69,7 @@ const ChatBot = () =>{
         <View style={[styles.zonaMensaje, {paddingBottom: Math.max(insets.bottom, 15)}]}>
           <View style={styles.contenedorMensaje}>
             <TextInput placeholder="Escriba un mensaje..." multiline maxLength={500 } style={styles.textboxMensaje}></TextInput>
-            <TouchableOpacity style={styles.botonEnviar} onPress={() => navigation.navigate("Inicio")}><Image source={require("../../../assets/fechaArriba.png")}/></TouchableOpacity> 
+            <TouchableOpacity style={styles.botonEnviar}><Image source={require("../../../assets/fechaArriba.png")}/></TouchableOpacity> 
           </View>
         </View>
       </KeyboardAvoidingView>

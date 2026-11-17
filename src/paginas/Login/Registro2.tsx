@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, ActivityIndicator, Platform } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
@@ -8,6 +8,15 @@ import { API_URL } from "../../../backend/src/config/api";
 
 type Registro2ScreenProp = NativeStackNavigationProp<RootStackParamList, "Registro2">;
 type Registro2RouteProp = RouteProp<RootStackParamList, "Registro2">;
+
+const mostrarAlerta = (titulo: string, mensaje: string, onOk?: () => void) => {
+  if (Platform.OS === "web") {
+    window.alert(`${titulo}\n\n${mensaje}`);
+    onOk?.();
+  } else {
+    Alert.alert(titulo, mensaje, [{ text: "OK", onPress: onOk }]);
+  }
+};
 
 const Registro2 = () => {
   const navigation = useNavigation<Registro2ScreenProp>();
@@ -24,12 +33,12 @@ const Registro2 = () => {
 
   const handleCrearCuenta = async () => {
     if (!email || !password || !confirmPassword) {
-      Alert.alert("Error", "Por favor completá todos los campos");
+      mostrarAlerta("Error", "Por favor completá todos los campos");
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert("Error", "Las contraseñas no coinciden");
+      mostrarAlerta("Error", "Las contraseñas no coinciden");
       return;
     }
 
@@ -55,15 +64,13 @@ const Registro2 = () => {
       if (response.ok && data.id_usuario) {
         // Guardamos la sesión iniciada
         await AsyncStorage.setItem("userId", String(data.id_usuario));
-        Alert.alert("¡Éxito!", "Cuenta creada correctamente", [
-          { text: "OK", onPress: () => navigation.navigate("Home") },
-        ]);
+        mostrarAlerta("¡Éxito!", "Cuenta creada correctamente", () => navigation.navigate("Login"));   
       } else {
-        Alert.alert("Error en el registro", data.mensaje || "No se pudo crear la cuenta");
+        mostrarAlerta("Error en el registro", data.mensaje || "No se pudo crear la cuenta");
       }
     } catch (error) {
       console.error("Error al registrar:", error);
-      Alert.alert("Error", "Ocurrió un error de conexión con el servidor");
+      mostrarAlerta("Error", "Ocurrió un error de conexión con el servidor");
     } finally {
       setLoading(false);
     }

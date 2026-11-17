@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { pool } from './config/db';
 import turnoRoutes from './routes/turnoRoutes';
 import authRoutes from './routes/authRoutes';
+import pacienteRoutes from './routes/pacienteRoutes';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 // Rutas
 app.use('/api/turnos', turnoRoutes);
 app.use('/api', authRoutes);
+app.use('/api/paciente', pacienteRoutes);
 // Ruta de prueba
 app.get('/api/health', async (req, res) => {
   try {

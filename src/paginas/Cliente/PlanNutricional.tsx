@@ -23,8 +23,6 @@ const PlanNutricional = () =>{
             <Image style={styles.imagenPlanNutricional} source={require("../../../assets/planNutricional.jpg")} resizeMode="contain"/>
         </View>
     </View>
-
-
   );
 }
 

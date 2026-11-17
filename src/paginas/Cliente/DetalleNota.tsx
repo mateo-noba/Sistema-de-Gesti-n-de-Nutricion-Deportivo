@@ -1,30 +1,17 @@
 import React from "react";
 import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image, ScrollView} from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useState, useEffect } from "react"
 import { RootStackParamList } from "../../../App";
 
 type NotasScreenProp = NativeStackNavigationProp<RootStackParamList, "DetalleNotas">;
-const DetalleNotas = () =>{
 
+type DetalleRouteProp = RouteProp<RootStackParamList, "DetalleNotas">;
+
+const DetalleNotas = () =>{
   const navigation = useNavigation<NotasScreenProp>();
-  const [notas, setNotas] = useState([
-    {
-      id:1,
-      titulo:"Control inicial",
-      contenido: "Contenido 1",
-      fecha:"16/06/2026",
-      pacienteId:"p1",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-  ])
+  const { titulo, fecha, contenido, peso } = useRoute<DetalleRouteProp>().params;
 
   return(
     <View style={styles.container}>
@@ -36,16 +23,18 @@ const DetalleNotas = () =>{
         </View>
     
         <ScrollView showsVerticalScrollIndicator={false} style={styles.contenedorNotas}>
-           <Text style={styles.titulo}>{notas[0].titulo}</Text>
-           <Text style={styles.titulo}>{notas[0].fecha}</Text>
-           <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur eaque et dicta laborum enim delectus esse distinctio excepturi repellat natus saepe veniam deleniti tempora animi nisi soluta, deserunt amet. Deserunt. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi praesentium omnis ratione fugit minima. Aspernatur libero sunt voluptate, autem numquam reprehenderit consectetur quaerat obcaecati quo deserunt saepe excepturi, maiores perferendis? Lorem ipsum dolor sit amet consectetur adipisicing elit. Id vero minus autem magnam voluptates expedita? Quasi mollitia cupiditate, temporibus commodi nam officia eaque assumenda saepe optio omnis necessitatibus nemo? Perferendis! Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium repellendus, provident velit tenetur reiciendis quam reprehenderit voluptas nemo saepe at modi laudantium, nobis unde, a incidunt perspiciatis sint commodi corporis? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe blanditiis tenetur eos est iste officiis consequuntur quod ad magni? Officia amet laudantium, deserunt laboriosam culpa error nihil? Voluptatum, sunt accusantium.</Text>
-           <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur eaque et dicta laborum enim delectus esse distinctio excepturi repellat natus saepe veniam deleniti tempora animi nisi soluta, deserunt amet. Deserunt. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi praesentium omnis ratione fugit minima. Aspernatur libero sunt voluptate, autem numquam reprehenderit consectetur quaerat obcaecati quo deserunt saepe excepturi, maiores perferendis? Lorem ipsum dolor sit amet consectetur adipisicing elit. Id vero minus autem magnam voluptates expedita? Quasi mollitia cupiditate, temporibus commodi nam officia eaque assumenda saepe optio omnis necessitatibus nemo? Perferendis! Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium repellendus, provident velit tenetur reiciendis quam reprehenderit voluptas nemo saepe at modi laudantium, nobis unde, a incidunt perspiciatis sint commodi corporis? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe blanditiis tenetur eos est iste officiis consequuntur quod ad magni? Officia amet laudantium, deserunt laboriosam culpa error nihil? Voluptatum, sunt accusantium.</Text>
-           <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur eaque et dicta laborum enim delectus esse distinctio excepturi repellat natus saepe veniam deleniti tempora animi nisi soluta, deserunt amet. Deserunt. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi praesentium omnis ratione fugit minima. Aspernatur libero sunt voluptate, autem numquam reprehenderit consectetur quaerat obcaecati quo deserunt saepe excepturi, maiores perferendis? Lorem ipsum dolor sit amet consectetur adipisicing elit. Id vero minus autem magnam voluptates expedita? Quasi mollitia cupiditate, temporibus commodi nam officia eaque assumenda saepe optio omnis necessitatibus nemo? Perferendis! Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium repellendus, provident velit tenetur reiciendis quam reprehenderit voluptas nemo saepe at modi laudantium, nobis unde, a incidunt perspiciatis sint commodi corporis? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe blanditiis tenetur eos est iste officiis consequuntur quod ad magni? Officia amet laudantium, deserunt laboriosam culpa error nihil? Voluptatum, sunt accusantium.</Text>
-           <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur eaque et dicta laborum enim delectus esse distinctio excepturi repellat natus saepe veniam deleniti tempora animi nisi soluta, deserunt amet. Deserunt. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi praesentium omnis ratione fugit minima. Aspernatur libero sunt voluptate, autem numquam reprehenderit consectetur quaerat obcaecati quo deserunt saepe excepturi, maiores perferendis? Lorem ipsum dolor sit amet consectetur adipisicing elit. Id vero minus autem magnam voluptates expedita? Quasi mollitia cupiditate, temporibus commodi nam officia eaque assumenda saepe optio omnis necessitatibus nemo? Perferendis! Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium repellendus, provident velit tenetur reiciendis quam reprehenderit voluptas nemo saepe at modi laudantium, nobis unde, a incidunt perspiciatis sint commodi corporis? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe blanditiis tenetur eos est iste officiis consequuntur quod ad magni? Officia amet laudantium, deserunt laboriosam culpa error nihil? Voluptatum, sunt accusantium.</Text>
+          <Text style={styles.titulo}>{titulo}</Text>
+          <Text style={styles.titulo}>{fecha}</Text>
+
+          {peso !== null && peso !== undefined && (
+            <Text style={styles.textoContenido}>Peso: {peso} kg</Text>
+          )}
+
+          <Text style={styles.textoContenido}>
+            {contenido || "Sin observaciones."}
+          </Text>
         </ScrollView>
     </View>
-
-
   );
 }
 
@@ -127,15 +116,14 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   contenedorNotas: {
-    flex: 1,
-    backgroundColor: "#fff79d",
-    width: 1200,
-    height: 700,
-    marginBottom: 30,
-    borderRadius: 10,
-
-    padding: 20,
-  },
+  flex: 1,
+  width: "100%",
+  maxWidth: 1200,
+  backgroundColor: "#fff79d",
+  marginBottom: 30,
+  borderRadius: 10,
+  padding: 20,
+},
   notas:{
     backgroundColor: "#fff79d",
     width: 200,

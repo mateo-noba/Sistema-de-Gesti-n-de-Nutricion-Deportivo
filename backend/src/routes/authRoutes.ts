@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { login, obtenerTurnoPorUsuario, registrarUsuario } from "../controllers/authController";
+import { login, obtenerTurnoPorUsuario, registrarUsuario, cancelarTurno, obtenerAvancesPorUsuario } from "../controllers/authController";
 
 const router: Router = Router();
 
@@ -11,5 +11,9 @@ router.get("/mis-turnos", obtenerTurnoPorUsuario);
 
 // ¡Agregamos la ruta de registro!
 router.post('/registro', registrarUsuario);
+
+router.put("/cancelar-turno", cancelarTurno);
+
+router.get("/avances", obtenerAvancesPorUsuario);
 
 export default router;

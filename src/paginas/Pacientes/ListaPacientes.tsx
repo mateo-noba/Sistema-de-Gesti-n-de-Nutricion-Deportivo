@@ -118,123 +118,119 @@ const ListaPacientes = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Listado de Pacientes</Text>
+      <FlatList
+        data={pacientesFiltrados}
+        keyExtractor={(item) => String(item.id)}
+        showsVerticalScrollIndicator={true}
+        contentContainerStyle={{ paddingBottom: 30 }}
+        ListHeaderComponent={
+          <View>
+            <Text style={styles.titulo}>Listado de Pacientes</Text>
 
-      <TextInput
-        style={styles.inputBusqueda}
-        placeholder="Buscar por nombre, apellido, dni, email, telefono, peso o altura..."
-        value={busqueda}
-        onChangeText={(text) => setBusqueda(text.toLowerCase())}
-      />
+            <TextInput
+              style={styles.inputBusqueda}
+              placeholder="Buscar por nombre, apellido, dni, email, telefono, peso o altura..."
+              value={busqueda}
+              onChangeText={(text) => setBusqueda(text.toLowerCase())}
+            />
 
-      <View style={styles.filtrosCard}>
-        <Text style={styles.subtitulo}>Filtros avanzados</Text>
+            <View style={styles.filtrosCard}>
+              <Text style={styles.subtitulo}>Filtros avanzados</Text>
 
-        <TextInput
-          style={styles.filtroInput}
-          placeholder="Filtrar por nombre"
-          value={filtroNombre}
-          onChangeText={(text) => setFiltroNombre(text.toLowerCase())}
-        />
-        <TextInput
-          style={styles.filtroInput}
-          placeholder="Filtrar por apellido"
-          value={filtroApellido}
-          onChangeText={(text) => setFiltroApellido(text.toLowerCase())}
-        />
-        <TextInput
-          style={styles.filtroInput}
-          placeholder="Filtrar por DNI"
-          value={filtroDni}
-          onChangeText={(text) => setFiltroDni(text.toLowerCase())}
-        />
-        <TextInput
-          style={styles.filtroInput}
-          placeholder="Filtrar por email"
-          value={filtroEmail}
-          onChangeText={(text) => setFiltroEmail(text.toLowerCase())}
-        />
-        <TextInput
-          style={styles.filtroInput}
-          placeholder="Filtrar por teléfono"
-          value={filtroTelefono}
-          onChangeText={(text) => setFiltroTelefono(text.toLowerCase())}
-        />
-        <TextInput
-          style={styles.filtroInput}
-          placeholder="Filtrar por teléfono"
-          value={filtroTelefono}
-          onChangeText={(text) => setFiltroTelefono(text.toLowerCase())}
-        />
-        <TextInput
-          style={styles.filtroInput}
-          placeholder="Filtrar por peso"
-          value={filtroPeso}
-          onChangeText={setFiltroPeso}
-        />
-        <TextInput
-          style={styles.filtroInput}
-          placeholder="Filtrar por altura"
-          value={filtroAltura}
-          onChangeText={setFiltroAltura}
-        />
-        <TextInput
-          style={styles.filtroInput}
-          placeholder="Filtrar por IMC"
-          value={filtroImc}
-          onChangeText={setFiltroImc}
-        />
-        <TextInput
-          style={styles.filtroInput}
-          placeholder="Filtrar por Estado"
-          value={filtroEstado}
-          onChangeText={setFiltroEstado}
-        />
-        <TouchableOpacity style={styles.btnLimpiar} onPress={limpiarFiltros}>
-          <Text>Limpiar filtros</Text>
-        </TouchableOpacity>
-      </View>
-
-      {pacientesFiltrados.length === 0 ? (
-        <Text>No hay pacientes cargados.</Text>
-      ) : (
-        <FlatList
-          data={pacientesFiltrados}
-          keyExtractor={(item) => item.id!}
-          renderItem={({ item }) => (
-            <View style={styles.tarjeta}>
-              <Text style={styles.nombre}>{item.nombre}</Text>
-              <Text>{item.peso}kg {item.altura}m {item.imc}</Text>
-              <View style={styles.botonera}>
-                <TouchableOpacity
-                  style={styles.botonAgregar}
-                  onPress={() => navigation.navigate("AgregarPaciente")} //pendiente crear agregarPaciente.tsx dentro de la carpeta pacientes
-                >
-                  <Text style={{ color: "white" }}>Agregar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.botonEditar}
-                  onPress={() => navigation.navigate("EditarPaciente", { id: item.id! })} //pendiente crear editarPaciente.tsx dentro de la carpeta pacientes
-                >
-                  <Text style={{ color: "white" }}>Editar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.botonEliminar}
-                  onPress={() => manejarEliminar(item.id!)}
-                >
-                  <Text style={{ color: "white" }}>Eliminar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.botonConsultar}
-                  onPress={() => navigation.navigate("ConsultarPaciente", { id: item.id! })} //pendiente crear consultarPaciente.tsx dentro de la carpeta pacientes
-                >
-                  <Text style={{ color: "white" }}>Consultar</Text>
-                </TouchableOpacity>
-              </View>
+              <TextInput
+                style={styles.filtroInput}
+                placeholder="Filtrar por nombre"
+                value={filtroNombre}
+                onChangeText={(text) => setFiltroNombre(text.toLowerCase())}
+              />
+              <TextInput
+                style={styles.filtroInput}
+                placeholder="Filtrar por apellido"
+                value={filtroApellido}
+                onChangeText={(text) => setFiltroApellido(text.toLowerCase())}
+              />
+              <TextInput
+                style={styles.filtroInput}
+                placeholder="Filtrar por DNI"
+                value={filtroDni}
+                onChangeText={(text) => setFiltroDni(text.toLowerCase())}
+              />
+              <TextInput
+                style={styles.filtroInput}
+                placeholder="Filtrar por email"
+                value={filtroEmail}
+                onChangeText={(text) => setFiltroEmail(text.toLowerCase())}
+              />
+              <TextInput
+                style={styles.filtroInput}
+                placeholder="Filtrar por teléfono"
+                value={filtroTelefono}
+                onChangeText={(text) => setFiltroTelefono(text.toLowerCase())}
+              />
+              <TextInput
+                style={styles.filtroInput}
+                placeholder="Filtrar por peso"
+                value={filtroPeso}
+                onChangeText={setFiltroPeso}
+              />
+              <TextInput
+                style={styles.filtroInput}
+                placeholder="Filtrar por altura"
+                value={filtroAltura}
+                onChangeText={setFiltroAltura}
+              />
+              <TextInput
+                style={styles.filtroInput}
+                placeholder="Filtrar por IMC"
+                value={filtroImc}
+                onChangeText={setFiltroImc}
+              />
+              <TextInput
+                style={styles.filtroInput}
+                placeholder="Filtrar por Estado"
+                value={filtroEstado}
+                onChangeText={setFiltroEstado}
+              />
+              <TouchableOpacity style={styles.btnLimpiar} onPress={limpiarFiltros}>
+                <Text>Limpiar filtros</Text>
+              </TouchableOpacity>
             </View>
-          )}
-        />
-      )}
+          </View>
+        }
+        ListEmptyComponent={<Text>No hay pacientes cargados.</Text>}
+        renderItem={({ item }) => (
+          <View style={styles.tarjeta}>
+            <Text style={styles.nombre}>{item.nombre} {item.apellido}</Text>
+            <Text>{item.peso}kg {item.altura}m {item.imc}</Text>
+            <View style={styles.botonera}>
+              <TouchableOpacity
+                style={styles.botonAgregar}
+                onPress={() => navigation.navigate("AgregarPaciente")}
+              >
+                <Text style={{ color: "white" }}>Agregar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.botonEditar}
+                onPress={() => navigation.navigate("EditarPaciente", { id: item.id! })}
+              >
+                <Text style={{ color: "white" }}>Editar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.botonEliminar}
+                onPress={() => manejarEliminar(item.id!)}
+              >
+                <Text style={{ color: "white" }}>Eliminar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.botonConsultar}
+                onPress={() => navigation.navigate("ConsultarPaciente", { id: item.id! })}
+              >
+                <Text style={{ color: "white" }}>Consultar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      />
     </View>
   );
 };

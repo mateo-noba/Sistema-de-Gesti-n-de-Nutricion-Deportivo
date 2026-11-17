@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { pool } from '../config/db';
+import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { 
   ILoginRequestBody, 
   ILoginResponseBody, 
@@ -128,16 +129,16 @@ export const registrarUsuario = async (req: Request, res: Response): Promise<Res
 
     // 3. Insertamos el nuevo usuario en la tabla `usuario`
     const [resultUsuario] = await connection.execute<ResultSetHeader>(
-      'INSERT INTO usuario (nombre, apellido, email, password, tipo_usuario) VALUES (?, ?, ?, ?, ?)',
-      [nombre, apellido, email, password, 'paciente']
+      `INSERT INTO usuario (nombre, apellido, email, password, dni, telefono, tipo_usuario, fecha_registro) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
+      [nombre, apellido, email, password, dni, telefono || null, 'paciente']
     );
 
     const id_usuario = resultUsuario.insertId;
 
     // 4. Insertamos los datos complementarios en la tabla `paciente`
     await connection.execute<ResultSetHeader>(
-      'INSERT INTO paciente (id_usuario, dni, telefono) VALUES (?, ?, ?)',
-      [id_usuario, dni, telefono || null]
+      'INSERT INTO paciente (id_usuario) VALUES (?)',
+      [id_usuario]
     );
 
     // Confirmamos los cambios en la BD
@@ -157,5 +158,62 @@ export const registrarUsuario = async (req: Request, res: Response): Promise<Res
   } finally {
     // Liberamos la conexión
     connection.release();
+  }
+};
+
+export const cancelarTurno = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { id_turno, id_usuario } = req.body;
+
+    if (!id_turno || !id_usuario) {
+      return res.status(400).json({ mensaje: 'Faltan datos para cancelar el turno' });
+    }
+
+    // Solo se cancela si el turno pertenece al usuario logueado
+    const [resultado] = await pool.execute<ResultSetHeader>(
+      `UPDATE turno t
+       INNER JOIN paciente p ON t.id_paciente = p.id_paciente
+       SET t.estado = 'cancelado'
+       WHERE t.id_turno = ? AND p.id_usuario = ? AND t.estado IN ('pendiente', 'confirmado')`,
+      [Number(id_turno), Number(id_usuario)]
+    );
+
+    if (resultado.affectedRows === 0) {
+      return res.status(404).json({ mensaje: 'No se encontró un turno para cancelar' });
+    }
+
+    return res.status(200).json({ mensaje: 'Turno cancelado correctamente' });
+  } catch (error) {
+    console.error('Error al cancelar turno:', error);
+    return res.status(500).json({ mensaje: 'Error al cancelar el turno' });
+  }
+};
+
+export const obtenerAvancesPorUsuario = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const id_usuario = Number(req.query.id_usuario);
+
+    if (!id_usuario) {
+      return res.status(400).json({ mensaje: 'Falta enviar el id_usuario' });
+    }
+
+    const [rows] = await pool.execute<RowDataPacket[]>(
+      `SELECT
+         a.id_avance AS id,
+         a.titulo,
+         DATE_FORMAT(a.fecha, '%Y-%m-%d') AS fecha,
+         a.peso,
+         COALESCE(a.notas, '') AS contenido
+       FROM avance a
+       INNER JOIN paciente p ON a.id_paciente = p.id_paciente
+       WHERE p.id_usuario = ?
+       ORDER BY a.fecha DESC, a.id_avance DESC`,
+      [id_usuario]
+    );
+
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error al obtener avances:', error);
+    return res.status(500).json({ mensaje: 'Error al consultar los avances' });
   }
 };

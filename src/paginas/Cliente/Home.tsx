@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Alert, Platform } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
@@ -17,12 +17,54 @@ interface ITurno {
   profesional_apellido?: string;
 }
 
+const mostrarAlerta = (titulo: string, mensaje: string, onOk?: () => void) => {
+  if (Platform.OS === "web") {
+    window.alert(`${titulo}\n\n${mensaje}`);
+    onOk?.();
+  } else {
+    Alert.alert(titulo, mensaje, [{ text: "OK", onPress: onOk }]);
+  }
+};
+
 const Home = () => {
 
   const navigation = useNavigation<HomeScreenProp>();
 
   const [turno, setTurno] = useState<ITurno | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const cancelarTurno = async () => {
+    if (!turno) return;
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+      const response = await fetch(`http://localhost:3000/api/cancelar-turno`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_turno: turno.id_turno, id_usuario: userId }),
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        setTurno(null); // el Home pasa a mostrar "No tenés turnos pendientes"
+      } else {
+        mostrarAlerta("Error", data.mensaje || "No se pudo cancelar el turno");
+      }
+    } catch (error) {
+      mostrarAlerta("Error", "Error de conexión con el servidor");
+    }
+  };
+
+  const confirmarCancelacion = () => {
+    if (!turno) return;
+    if (Platform.OS === "web") {
+      if (window.confirm("¿Seguro que querés cancelar el turno?")) cancelarTurno();
+      return;
+    }
+    Alert.alert("Cancelar turno", "¿Seguro que querés cancelar el turno?", [
+      { text: "No", style: "cancel" },
+      { text: "Sí, cancelar", style: "destructive", onPress: cancelarTurno },
+    ]);
+  };
 
   // Cargar los datos del turno al entrar a la pantalla
   useEffect(() => {
@@ -117,7 +159,7 @@ const Home = () => {
             <Text style={styles.textoBoton}>Rutina de ejercicios</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.botonCancelar}>
+          <TouchableOpacity style={styles.botonCancelar} onPress={confirmarCancelacion} disabled={!turno}>
             <Text style={styles.textoBoton}>Cancelar turno</Text>
           </TouchableOpacity>
         </View>

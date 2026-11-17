@@ -16,6 +16,7 @@ import ChatBot from "./src/paginas/ChatBot/ChatBot";
 import ListaTurnos from "./src/paginas/Turnos/ListaTurnos";
 import AgregarTurno from "./src/paginas/Turnos/AgregarTurno";
 import EditarTurno from "./src/paginas/Turnos/EditarTurno";
+import ListaPacientes from "./src/paginas/Pacientes/ListaPacientes";
 
 export type RootStackParamList = {
   Inicio: undefined;
@@ -26,7 +27,7 @@ export type RootStackParamList = {
   PlanNutricional: undefined;
   RutinaDeEjercicios: undefined;
   Notas: undefined;
-  DetalleNotas: undefined;
+  DetalleNotas: { titulo: string; fecha: string; contenido: string; peso: number | null };
   ChatBot: undefined;
   ListaTurnos: undefined;
   AgregarTurno: undefined;
@@ -34,6 +35,7 @@ export type RootStackParamList = {
   ListaPacientes: undefined;
   AgregarPaciente: undefined;
   EditarPaciente: { id: string };
+  ConsultarPaciente: { id: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -62,6 +64,7 @@ export default function App() {
         <Stack.Screen name="ListaTurnos" component={ListaTurnos} options={{ title: "Lista de Turnos" }} />
         <Stack.Screen name="AgregarTurno" component={AgregarTurno} options={{ title: "Crear Turno" }} />
         <Stack.Screen name="EditarTurno" component={EditarTurno} options={{ title: "Editar Turno" }} />
+        <Stack.Screen name="ListaPacientes" component={ListaPacientes} options={{ title: "Lista de Pacientes" }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

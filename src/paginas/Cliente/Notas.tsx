@@ -1,9 +1,10 @@
 import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image, ScrollView, useWindowDimensions } from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image, ScrollView, useWindowDimensions, ActivityIndicator } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react"
 import { RootStackParamList } from "../../../App";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type NotasScreenProp = NativeStackNavigationProp<RootStackParamList, "Notas">;
 const Notas = () =>{
@@ -17,121 +18,43 @@ const Notas = () =>{
   const anchoDisponible = width - 40 - PADDING * 2;
   const anchoNota = (anchoDisponible - GAP * (COLUMNAS - 1)) / COLUMNAS;
 
-  const [notas, setNotas] = useState([
-    {
-      id:1,
-      titulo:"Control inicial",
-      contenido: "Contenido 1",
-      fecha:"16/06/2026",
-      pacienteId:"p1",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    {
-      id:2,
-      titulo:"Control inicial",
-      contenido: "Contenido 2",
-      fecha:"16/06/2026",
-      pacienteId:"p2",
-    },
-    
-  ])
+  interface INota {
+    id: number;
+    titulo: string;
+    contenido: string;
+    fecha: string;
+    peso: number | null;
+  }
+
+  const formatearFecha = (fecha: string) => {
+    const [anio, mes, dia] = fecha.slice(0, 10).split("-");
+    return `${dia}/${mes}/${anio}`;
+  };
+
+  // dentro del componente:
+  const [notas, setNotas] = useState<INota[]>([]);
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => {
+    const cargarAvances = async () => {
+      try {
+        const userId = await AsyncStorage.getItem("userId");
+        if (!userId) return;
+
+        const response = await fetch(`http://localhost:3000/api/avances?id_usuario=${userId}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setNotas(data);
+        }
+      } catch (error) {
+        console.error("Error al cargar avances:", error);
+      } finally {
+        setCargando(false);
+      }
+    };
+    cargarAvances();
+  }, []);
 
   return(
     <View style={styles.container}>
@@ -142,18 +65,37 @@ const Notas = () =>{
           <TouchableOpacity style={styles.botonChatbot} onPress={() => navigation.navigate("ChatBot")}><Image source={require("../../../assets/ensaladin.png")} style={styles.imagenChatbot} /></TouchableOpacity>
         </View>
     
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.contenedorNotas} style={styles.contenedorScroll}>
-            {notas.map((nota) => (
-                <TouchableOpacity
-                  key={nota.id}
-                  style={[styles.notas, {width: anchoNota}]}
-                  onPress={() => navigation.navigate("DetalleNotas")}
-                >
-                  <Text>{nota.titulo}</Text>
-                  <Text>{nota.fecha}</Text>
-                </TouchableOpacity>
-            ))}
+        {cargando ? (
+        <ActivityIndicator size="large" color="#fff" style={{ marginTop: 40 }} />
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.contenedorNotas}
+          style={styles.contenedorScroll}
+        >
+          {notas.length === 0 ? (
+            <Text>Todavía no tenés avances registrados.</Text>
+          ) : (
+            notas.map((nota) => (
+              <TouchableOpacity
+                key={nota.id}
+                style={[styles.notas, { width: anchoNota }]}
+                onPress={() =>
+                  navigation.navigate("DetalleNotas", {
+                    titulo: nota.titulo,
+                    fecha: formatearFecha(nota.fecha),
+                    contenido: nota.contenido,
+                    peso: nota.peso,
+                  })
+                }
+              >
+                <Text>{nota.titulo}</Text>
+                <Text>{formatearFecha(nota.fecha)}</Text>
+              </TouchableOpacity>
+            ))
+          )}
         </ScrollView>
+      )}
     </View>
 
 

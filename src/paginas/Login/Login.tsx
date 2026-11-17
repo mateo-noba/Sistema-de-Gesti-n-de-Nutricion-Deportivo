@@ -80,7 +80,7 @@ const Login = () => {
 
           <Text style={styles.textoChico}>
             ¿Olvidaste tu contraseña?{" "}
-            <Text style={styles.link} onPress={() => navigation.navigate("Notas")}>
+            <Text style={styles.link}>
               Recuperar
             </Text>
           </Text>

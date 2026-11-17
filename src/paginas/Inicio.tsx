@@ -34,7 +34,7 @@ const Inicio = () => {
 
         <TouchableOpacity
           style={styles.card}
-          onPress={() => navigation.navigate("AgregarTurno")}
+          onPress={() => navigation.navigate("ListaPacientes")}
         >
           <Text style={styles.icono}>👥</Text>
           <Text style={styles.tituloCard}>Lista de pacientes</Text>

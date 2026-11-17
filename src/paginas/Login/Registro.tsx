@@ -1,10 +1,19 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, Platform } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../../App";
 
 type RegistroScreenProp = NativeStackNavigationProp<RootStackParamList, "Registro">;
+
+const mostrarAlerta = (titulo: string, mensaje: string, onOk?: () => void) => {
+  if (Platform.OS === "web") {
+    window.alert(`${titulo}\n\n${mensaje}`);
+    onOk?.();
+  } else {
+    Alert.alert(titulo, mensaje, [{ text: "OK", onPress: onOk }]);
+  }
+};
 
 const Registro = () => {
   const navigation = useNavigation<RegistroScreenProp>();
@@ -17,7 +26,7 @@ const Registro = () => {
 
   const handleSiguiente = () => {
     if (!nombre || !apellido || !dni || !telefono) {
-      Alert.alert("Campos incompletos", "Por favor completá todos los datos.");
+      mostrarAlerta("Campos incompletos", "Por favor completá todos los datos.");
       return;
     }
 
