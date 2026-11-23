@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { pool } from '../config/db';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
+import PDFDocument from 'pdfkit';
 import { 
   ILoginRequestBody, 
   ILoginResponseBody, 
@@ -215,5 +216,116 @@ export const obtenerAvancesPorUsuario = async (req: Request, res: Response): Pro
   } catch (error) {
     console.error('Error al obtener avances:', error);
     return res.status(500).json({ mensaje: 'Error al consultar los avances' });
+  }
+};
+
+const buscarPlan = async (id_usuario: number) => {
+  const [rows] = await pool.execute<RowDataPacket[]>(
+    `SELECT pn.imagen
+     FROM plan_nutricional pn
+     INNER JOIN paciente p ON pn.id_paciente = p.id_paciente
+     WHERE p.id_usuario = ?
+     ORDER BY pn.id_plan_nutricional DESC
+     LIMIT 1`,
+    [id_usuario]
+  );
+  return rows[0];
+};
+
+export const obtenerPlanNutricional = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const id_usuario = Number(req.query.id_usuario);
+    if (!id_usuario) return res.status(400).json({ mensaje: 'Falta enviar el id_usuario' });
+
+    const plan = await buscarPlan(id_usuario);
+    if (!plan || !plan.imagen) {
+      return res.status(404).json({ mensaje: 'No tenés un plan nutricional cargado' });
+    }
+
+    return res.status(200).json({ imagen: String(plan.imagen).replace(/\s+/g, '') });
+  } catch (error) {
+    console.error('Error al obtener plan:', error);
+    return res.status(500).json({ mensaje: 'Error al consultar el plan nutricional' });
+  }
+};
+
+export const descargarPlanPDF = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const id_usuario = Number(req.query.id_usuario);
+    const plan = id_usuario ? await buscarPlan(id_usuario) : null;
+    if (!plan || !plan.imagen) {
+      res.status(404).json({ mensaje: 'No tenés un plan nutricional cargado' });
+      return;
+    }
+
+    // Quitamos el prefijo "data:image/...;base64," y convertimos a Buffer
+    const base64 = String(plan.imagen).replace(/^data:image\/\w+;base64,/, '');
+    const buffer = Buffer.from(base64, 'base64');
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="plan-nutricional.pdf"');
+
+    const doc = new PDFDocument({ size: 'A4', margin: 40 });
+    doc.pipe(res);
+    doc.image(buffer, { fit: [515, 760], align: 'center', valign: 'center' });
+    doc.end();
+  } catch (error) {
+    console.error('Error al generar PDF:', error);
+    res.status(500).json({ mensaje: 'Error al generar el PDF' });
+  }
+};
+
+const buscarRutina = async (id_usuario: number) => {
+  const [rows] = await pool.execute<RowDataPacket[]>(
+    `SELECT pd.imagen
+     FROM plan_deportivo pd
+     INNER JOIN paciente p ON pd.id_paciente = p.id_paciente
+     WHERE p.id_usuario = ?
+     ORDER BY pd.id_plan_deportivo DESC
+     LIMIT 1`,
+    [id_usuario]
+  );
+  return rows[0];
+};
+
+export const obtenerRutinaEjercicios = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const id_usuario = Number(req.query.id_usuario);
+    if (!id_usuario) return res.status(400).json({ mensaje: 'Falta enviar el id_usuario' });
+
+    const rutina = await buscarRutina(id_usuario);
+    if (!rutina || !rutina.imagen) {
+      return res.status(404).json({ mensaje: 'No tenés una rutina de ejercicios cargada' });
+    }
+
+    return res.status(200).json({ imagen: String(rutina.imagen).replace(/\s+/g, '') });
+  } catch (error) {
+    console.error('Error al obtener rutina:', error);
+    return res.status(500).json({ mensaje: 'Error al consultar la rutina de ejercicios' });
+  }
+};
+
+export const descargarRutinaPDF = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const id_usuario = Number(req.query.id_usuario);
+    const rutina = id_usuario ? await buscarRutina(id_usuario) : null;
+    if (!rutina || !rutina.imagen) {
+      res.status(404).json({ mensaje: 'No tenés una rutina de ejercicios cargada' });
+      return;
+    }
+
+    const base64 = String(rutina.imagen).replace(/^data:image\/\w+;base64,/, '');
+    const buffer = Buffer.from(base64, 'base64');
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="rutina-ejercicios.pdf"');
+
+    const doc = new PDFDocument({ size: 'A4', margin: 40 });
+    doc.pipe(res);
+    doc.image(buffer, { fit: [515, 760], align: 'center', valign: 'center' });
+    doc.end();
+  } catch (error) {
+    console.error('Error al generar PDF de la rutina:', error);
+    res.status(500).json({ mensaje: 'Error al generar el PDF' });
   }
 };

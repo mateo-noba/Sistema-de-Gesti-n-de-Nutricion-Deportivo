@@ -1,33 +1,75 @@
-import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Linking } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootStackParamList } from "../../../App";
+import { API_URL } from "../../../backend/src/config/api";
 
 type RutinaDeEjerciciosScreenProp = NativeStackNavigationProp<RootStackParamList, "RutinaDeEjercicios">;
 const RutinaDeEjercicios = () =>{
 
   const navigation = useNavigation<RutinaDeEjerciciosScreenProp>();
+  const [imagen, setImagen] = useState<string | null>(null);
+  const [cargando, setCargando] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
 
-  return(
+  useEffect(() => {
+    const cargarRutina = async () => {
+      try {
+        const id = await AsyncStorage.getItem("userId");
+        setUserId(id);
+        if (!id) return;
+
+        const response = await fetch(`${API_URL}/rutina-ejercicios?id_usuario=${id}`);
+        const data = await response.json();
+        if (response.ok) setImagen(data.imagen);
+      } catch (error) {
+        console.error("Error al cargar la rutina:", error);
+      } finally {
+        setCargando(false);
+      }
+    };
+    cargarRutina();
+  }, []);
+
+  const descargarPDF = () => {
+    Linking.openURL(`${API_URL}/rutina-ejercicios/pdf?id_usuario=${userId}`);
+  };
+
+ 
+  return (
     <View style={styles.container}>
-        <View style={styles.contenedorBotones}>
-          <View style={styles.botonesIzquierda}>
-            <TouchableOpacity style={styles.botonAtras} onPress={() => navigation.goBack()}><Image source={require("../../../assets/flechaAtras.png")} style={styles.imagenFlecha}/></TouchableOpacity>
-            <TouchableOpacity style={styles.botonDescarga}>Descargar en formato PDF</TouchableOpacity>
-          </View>
-          <TouchableOpacity style={styles.botonChatbot}><Image source={require("../../../assets/ensaladin.png")} style={styles.imagenChatbot}/></TouchableOpacity>
+      <View style={styles.contenedorBotones}>
+        <View style={styles.botonesIzquierda}>
+          <TouchableOpacity style={styles.botonAtras} onPress={() => navigation.goBack()}>
+            <Image source={require("../../../assets/flechaAtras.png")} style={styles.imagenFlecha} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.botonDescarga, !imagen && { opacity: 0.5 }]}
+            onPress={descargarPDF}
+            disabled={!imagen}
+          >
+            <Text style={styles.textoBotonDescarga}>Descargar en formato PDF</Text>
+          </TouchableOpacity>
         </View>
-    
-        <View style={styles.contenedorRutinaDeEjercicios}>
-            <Image style={styles.imagenRutinaDeEjercicios} source={require("../../../assets/rutinaDeEjercicios.jpg")} resizeMode="contain"/>
-        </View>
+        <TouchableOpacity style={styles.botonChatbot} onPress={() => navigation.navigate("ChatBot")}>
+          <Image source={require("../../../assets/ensaladin.png")} style={styles.imagenChatbot} />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.contenedorRutina}>
+        {cargando ? (
+          <ActivityIndicator size="large" color="#4db6ac" />
+        ) : imagen ? (
+          <Image style={styles.imagenRutina} source={{ uri: imagen }} resizeMode="contain" />
+        ) : (
+          <Text>Todavía no tenés una rutina de ejercicios cargada.</Text>
+        )}
+      </View>
     </View>
-
-
   );
-}
-
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -154,7 +196,8 @@ const styles = StyleSheet.create({
     color:"#f5f5f5",
     fontWeight: "bold",
     fontSize: 19,
-    
+    textAlign:"center",
+    justifyContent: "center",
     height: 50,
     width: 270,
   },
@@ -213,7 +256,27 @@ const styles = StyleSheet.create({
   link:{
     color: "#0004d8"
 
-  }
+  },
+  contenedorRutina: {
+    backgroundColor: "#f5f5f5",
+    width: "100%",
+    maxWidth: 740,
+    height: 500,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+    marginTop: 10,
+  },
+  imagenRutina: {
+    width: "100%",
+    height: "100%",
+  },
+  textoBotonDescarga: {
+    color: "#f5f5f5",
+    fontWeight: "bold",
+    fontSize: 19,
+  },
 });
 
 export default RutinaDeEjercicios;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { login, obtenerTurnoPorUsuario, registrarUsuario, cancelarTurno, obtenerAvancesPorUsuario } from "../controllers/authController";
+import { login, obtenerTurnoPorUsuario, registrarUsuario, cancelarTurno, obtenerAvancesPorUsuario, obtenerPlanNutricional, descargarPlanPDF, obtenerRutinaEjercicios, descargarRutinaPDF } from "../controllers/authController";
 
 const router: Router = Router();
 
@@ -15,5 +15,13 @@ router.post('/registro', registrarUsuario);
 router.put("/cancelar-turno", cancelarTurno);
 
 router.get("/avances", obtenerAvancesPorUsuario);
+
+router.get("/plan-nutricional", obtenerPlanNutricional);
+
+router.get("/plan-nutricional/pdf", descargarPlanPDF);
+
+router.get("/rutina-ejercicios", obtenerRutinaEjercicios);
+
+router.get("/rutina-ejercicios/pdf", descargarRutinaPDF);
 
 export default router;

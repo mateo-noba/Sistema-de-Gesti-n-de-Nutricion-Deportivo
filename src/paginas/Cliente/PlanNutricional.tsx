@@ -1,26 +1,62 @@
-import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Linking } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootStackParamList } from "../../../App";
+import { API_URL } from "../../../backend/src/config/api";
 
 type PlanNutricionalScreenProp = NativeStackNavigationProp<RootStackParamList, "PlanNutricional">;
+
 const PlanNutricional = () =>{
 
   const navigation = useNavigation<PlanNutricionalScreenProp>();
+  const [imagen, setImagen] = useState<string | null>(null);
+  const [cargando, setCargando] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const cargarPlan = async () => {
+      try {
+        const id = await AsyncStorage.getItem("userId");
+        setUserId(id);
+        if (!id) return;
+
+        const response = await fetch(`${API_URL}/plan-nutricional?id_usuario=${id}`);
+        const data = await response.json();
+        console.log("status:", response.status, "largo:", data.imagen?.length);
+        if (response.ok) setImagen(data.imagen);
+      } catch (error) {
+        console.error("Error al cargar el plan:", error);
+      } finally {
+        setCargando(false);
+      }
+    };
+    cargarPlan();
+  }, []);
+
+  const descargarPDF = () => {
+    Linking.openURL(`${API_URL}/plan-nutricional/pdf?id_usuario=${userId}`);
+  };
 
   return(
     <View style={styles.container}>
         <View style={styles.contenedorBotones}>
           <View style={styles.botonesIzquierda}>
             <TouchableOpacity style={styles.botonAtras} onPress={() => navigation.goBack()}><Image source={require("../../../assets/flechaAtras.png")} style={styles.imagenFlecha}/></TouchableOpacity>
-            <TouchableOpacity style={styles.botonDescarga}>Descargar en formato PDF</TouchableOpacity>
+            <TouchableOpacity style={[styles.botonDescarga, !imagen && { opacity: 0.5 }]} onPress={descargarPDF} disabled={!imagen} ><Text style={styles.textoBotonDescarga}>Descargar en formato PDF</Text></TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.botonChatbot}><Image source={require("../../../assets/ensaladin.png")} style={styles.imagenChatbot}/></TouchableOpacity>
+          <TouchableOpacity style={styles.botonChatbot} onPress={() => navigation.navigate("ChatBot")}><Image source={require("../../../assets/ensaladin.png")} style={styles.imagenChatbot}/></TouchableOpacity>
         </View>
     
         <View style={styles.contenedorPlanNutricional}>
-            <Image style={styles.imagenPlanNutricional} source={require("../../../assets/planNutricional.jpg")} resizeMode="contain"/>
+            {cargando ? (
+              <ActivityIndicator size="large" color="#4db6ac" />
+            ) : imagen ? (
+              <Image style={styles.imagenPlanNutricional} source={{ uri: imagen }} resizeMode="contain" />
+            ) : (
+              <Text>Todavía no tenés un plan nutricional cargado.</Text>
+            )}
         </View>
     </View>
   );
@@ -101,13 +137,14 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   contenedorPlanNutricional: {
-    flex: 1,
     backgroundColor: "#f5f5f5",
     width: 740,
-    height: 600,
+    height: 500,              
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden",
+    marginTop: 10,
   },
   input: {
     borderWidth: 1,
@@ -152,7 +189,8 @@ const styles = StyleSheet.create({
     color:"#f5f5f5",
     fontWeight: "bold",
     fontSize: 19,
-    
+    textAlign: "center",
+    justifyContent: "center",
     height: 50,
     width: 270,
   },
@@ -207,7 +245,15 @@ const styles = StyleSheet.create({
   imagenPlanNutricional:{
     marginTop: 10,
     marginBottom: 10,
+    width: "100%",
+    height: 480,
+    aspectRatio: 16/9,
   },
+  textoBotonDescarga: {
+    color: "#f5f5f5",
+    fontWeight: "bold",
+    fontSize: 19,
+},
   link:{
     color: "#0004d8"
 
