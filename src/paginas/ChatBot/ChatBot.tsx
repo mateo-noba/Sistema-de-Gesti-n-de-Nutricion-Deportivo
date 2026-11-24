@@ -1,10 +1,16 @@
 import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image, ScrollView, Pressable, useWindowDimensions, KeyboardAvoidingView, Platform } from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity,TextInput, Image, ScrollView, Pressable, useWindowDimensions, KeyboardAvoidingView, Platform, ActivityIndicator } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react";
 import { RootStackParamList } from "../../../App";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { API_URL } from "../../../backend/src/config/api";
+
+interface Mensaje {
+  rol: "user" | "model";
+  texto: string;
+}
 
 type ChatBotScreenProp = NativeStackNavigationProp<RootStackParamList, "ChatBot">;
 const ChatBot = () =>{
@@ -14,7 +20,54 @@ const ChatBot = () =>{
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const esMovil = width < 768;
-  
+  const [mensajes, setMensajes] = useState<Mensaje[]>([]);
+  const [texto, setTexto] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const scrollRef = useRef<React.ElementRef<typeof ScrollView>>(null);
+
+  const enviar = async () => {
+    const contenido = texto.trim();
+    if (!contenido || enviando) return;
+
+    const historial: Mensaje[] = [...mensajes, { rol: "user", texto: contenido }];
+    setMensajes(historial);
+    setTexto("");
+    setEnviando(true);
+
+    try {
+      const response = await fetch(`${API_URL}/chatbot`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mensajes: historial }),
+      });
+      const data = await response.json();
+
+      const respuesta = response.ok
+        ? data.respuesta
+        : data.mensaje || "Ocurrió un error, probá de nuevo.";
+      setMensajes([...historial, { rol: "model", texto: respuesta }]);
+    } catch (error) {
+      setMensajes([
+        ...historial,
+        { rol: "model", texto: "No pude conectarme con el servidor." },
+      ]);
+    } finally {
+      setEnviando(false);
+    }
+  };
+
+  const nuevoChat = () => {
+    setMensajes([]);
+    setTexto("");
+  };
+
+  // Enter envía, Shift+Enter hace salto de línea (solo en web)
+  const manejarTecla = (e: any) => {
+    if (Platform.OS === "web" && e.nativeEvent.key === "Enter" && !e.nativeEvent.shiftKey) {
+      e.preventDefault();
+      enviar();
+    }
+  };
   
   return(
     <View style={styles.container}>
@@ -32,16 +85,10 @@ const ChatBot = () =>{
               <Pressable style={({hovered}: any) => [styles.botonNuevoChat, hovered && styles.botonHover]}><Image style={styles.imagenMas} source={require("../../../assets/simboloMas.png")}/><Text style={styles.textoNuevoChat}>Nuevo chat</Text></Pressable>
               <Text style={styles.textoChat}>Chats</Text>
               <ScrollView>
-                <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
-                <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
-                <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
-                <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
-                <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
-                <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
-                <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
-                <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
-                <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
-                <Pressable style={({hovered}: any) => [styles.botonChats, hovered && styles.botonHover]}><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
+                <Pressable
+                  style={({hovered}: any) => [styles.botonNuevoChat, hovered && styles.botonHover]}
+                  onPress={nuevoChat}
+                ><Text style={styles.textoBotonChat}>Hola lorem</Text></Pressable>
               </ScrollView>
               <View style={styles.contenedorCuenta}>
                 <Image source={require("../../../assets/iconoCuenta.png")}/>
@@ -55,21 +102,48 @@ const ChatBot = () =>{
 
       <KeyboardAvoidingView style={styles.contenedorDerecha} behavior={Platform.OS === "ios" ? "padding" : undefined}>
         <TouchableOpacity style={[styles.botonMenu, {marginTop: insets.top + 10, marginLeft: 10}]} onPress={() => setMenuAbierto(!menuAbierto)}><Image source={require("../../../assets/menu.png")}/></TouchableOpacity>
-        <ScrollView style={styles.scrollChat} contentContainerStyle={styles.scrollChatContenido}>
+        <ScrollView
+          ref={scrollRef}
+          style={styles.scrollChat}
+          contentContainerStyle={styles.scrollChatContenido}
+          onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
+        >
           <View style={styles.contenedorChat}>
-            <Text style={styles.textPregunta}>hola Lorem Lorem Lorem hola Lorem Lorem Lorem hola Lorem Lorem Lorem hola Lorem Lorem Lorem</Text>
-            <Text style={styles.textRespuesta}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt aliquam cum error! Asperiores debitis qui tempora quisquam vitae facilis rerum repellat consectetur ut. Maxime eveniet repellat soluta dignissimos quae consequatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis exercitationem vitae cum nam iure dignissimos officia, quam dolore ea nihil sed assumenda aut inventore et fugit tempore voluptate, veritatis impedit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus laborum exercitationem sapiente iure, sint, doloribus, distinctio quos laboriosam labore ipsa ex voluptas? Fuga earum voluptas enim magni explicabo amet id? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam facilis vel hic repellendus voluptatem veritatis explicabo enim, consequatur atque itaque quidem assumenda vero necessitatibus sint perspiciatis possimus at debitis voluptatibus?
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt aliquam cum error! Asperiores debitis qui tempora quisquam vitae facilis rerum repellat consectetur ut. Maxime eveniet repellat soluta dignissimos quae consequatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis exercitationem vitae cum nam iure dignissimos officia, quam dolore ea nihil sed assumenda aut inventore et fugit tempore voluptate, veritatis impedit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus laborum exercitationem sapiente iure, sint, doloribus, distinctio quos laboriosam labore ipsa ex voluptas? Fuga earum voluptas enim magni explicabo amet id? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam facilis vel hic repellendus voluptatem veritatis explicabo enim, consequatur atque itaque quidem assumenda vero necessitatibus sint perspiciatis possimus at debitis voluptatibus?
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt aliquam cum error! Asperiores debitis qui tempora quisquam vitae facilis rerum repellat consectetur ut. Maxime eveniet repellat soluta dignissimos quae consequatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis exercitationem vitae cum nam iure dignissimos officia, quam dolore ea nihil sed assumenda aut inventore et fugit tempore voluptate, veritatis impedit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus laborum exercitationem sapiente iure, sint, doloribus, distinctio quos laboriosam labore ipsa ex voluptas? Fuga earum voluptas enim magni explicabo amet id? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam facilis vel hic repellendus voluptatem veritatis explicabo enim, consequatur atque itaque quidem assumenda vero necessitatibus sint perspiciatis possimus at debitis voluptatibus?
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt aliquam cum error! Asperiores debitis qui tempora quisquam vitae facilis rerum repellat consectetur ut. Maxime eveniet repellat soluta dignissimos quae consequatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis exercitationem vitae cum nam iure dignissimos officia, quam dolore ea nihil sed assumenda aut inventore et fugit tempore voluptate, veritatis impedit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus laborum exercitationem sapiente iure, sint, doloribus, distinctio quos laboriosam labore ipsa ex voluptas? Fuga earum voluptas enim magni explicabo amet id? Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam facilis vel hic repellendus voluptatem veritatis explicabo enim, consequatur atque itaque quidem assumenda vero necessitatibus sint perspiciatis possimus at debitis voluptatibus?
-            </Text>
+            {mensajes.length === 0 && (
+              <Text style={styles.textRespuesta}>
+                Hola, soy Ensaladin tu asistente de nutrición. ¿En qué te puedo ayudar?
+              </Text>
+            )}
+
+            {mensajes.map((m, i) => (
+              <Text key={i} style={m.rol === "user" ? styles.textPregunta : styles.textRespuesta}>
+                {m.texto}
+              </Text>
+            ))}
+
+            {enviando && <ActivityIndicator color="#e7edec" style={{ marginTop: 10 }} />}
           </View>
         </ScrollView>
 
         <View style={[styles.zonaMensaje, {paddingBottom: Math.max(insets.bottom, 15)}]}>
           <View style={styles.contenedorMensaje}>
-            <TextInput placeholder="Escriba un mensaje..." multiline maxLength={500 } style={styles.textboxMensaje}></TextInput>
-            <TouchableOpacity style={styles.botonEnviar}><Image source={require("../../../assets/fechaArriba.png")}/></TouchableOpacity> 
+            <TextInput
+              placeholder="Escriba un mensaje..."
+              placeholderTextColor="#9aa3a1"
+              multiline
+              maxLength={500}
+              style={styles.textboxMensaje}
+              value={texto}
+              onChangeText={setTexto}
+              onKeyPress={manejarTecla}
+            />
+            <TouchableOpacity
+              style={[styles.botonEnviar, (!texto.trim() || enviando) && { opacity: 0.5 }]}
+              onPress={enviar}
+              disabled={!texto.trim() || enviando}
+            >
+              <Image source={require("../../../assets/fechaArriba.png")} />
+            </TouchableOpacity>
           </View>
         </View>
       </KeyboardAvoidingView>

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { login, obtenerTurnoPorUsuario, registrarUsuario, cancelarTurno, obtenerAvancesPorUsuario, obtenerPlanNutricional, descargarPlanPDF, obtenerRutinaEjercicios, descargarRutinaPDF } from "../controllers/authController";
+import { enviarMensaje } from "../controllers/chatController";
 
 const router: Router = Router();
 
@@ -23,5 +24,7 @@ router.get("/plan-nutricional/pdf", descargarPlanPDF);
 router.get("/rutina-ejercicios", obtenerRutinaEjercicios);
 
 router.get("/rutina-ejercicios/pdf", descargarRutinaPDF);
+
+router.post("/chatbot", enviarMensaje);
 
 export default router;
